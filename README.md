@@ -31,4 +31,8 @@ This project is a simple FTP server implemented in Java using Socket programming
     ```
 - Server: Contains server-side classes managing client connections and command execution.
 - Common: Includes shared utilities and data structures used by both server and client components.
-
+  ## Resources used
+    - https://www.rfc-editor.org/rfc/rfc959
+    - https://www.hostitsmart.com/manage/knowledgebase/392/What-is-the-Difference-Between-HTTP-and-FTP.html
+    - http://www.nsftools.com/tips/RawFTP.htm
+    
