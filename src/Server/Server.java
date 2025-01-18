@@ -22,6 +22,7 @@ public class Server {
     public void start() throws IOException {
 
         // start the server
+        System.out.println("Starting server...");
         ServerSocket serverSocket = new ServerSocket(serverPort, 50, serverAddress);
 
         while(isServerRunning) {

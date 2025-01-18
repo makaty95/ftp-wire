@@ -1,25 +1,61 @@
 package Client;
 
 import Common.Reply;
-
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 public class DataReceiver {
-    String fileName;
-    long fileSize;
+    private         boolean     receiveDone;
+    private         double      currentPercentage;
+    private final   String      fileName;
+    private final   long        fileSize;
+    private final   char[]      loadingBar;
+    private final   char        loadingChar;
+    private final   int         barSize;
 
     public DataReceiver(Reply reply) {
+        System.out.println("content: " + reply.getContent());
         String[] splits = reply.getContent().trim().split(" ");
+
         this.fileName = splits[0];
         this.fileSize = Long.valueOf(splits[1]);
 
+        System.out.println("fileName: " + fileName);
+        System.out.println("fileSize: " + fileSize);
+
+        barSize = 50;
+        receiveDone = false;
+        loadingBar = new char[barSize];
+        loadingChar = '#';
+        for(int i = 0; i<barSize; i++) {
+            loadingBar[i] = ' ';
+        }
     }
 
-    public void updateBar(long loaded) {
-        System.out.println("\r" + ((float)loaded/fileSize)*100.f + "% Loaded.");
+    public void displayLoadingBar() {
+        String loadingString = new String(loadingBar);
+        System.out.printf("\r[%s] %.2f%% loaded.", loadingString, currentPercentage);
+    }
+
+    public void updateLoadingBar() {
+        int threshold = (int)currentPercentage * barSize / 100;
+        for(int i = 0; i<threshold; i++) {
+            loadingBar[i] = loadingChar;
+        }
+    }
+
+    public void updatePercentage(long loaded) {
+        currentPercentage = ((double)loaded/fileSize)*100;
+    }
+
+    public void updateState(long loaded) {
+        updatePercentage(loaded);
+        updateLoadingBar();
+        displayLoadingBar();
+
+        // if the all file bytes are received terminate the process.
+        if(loaded >= fileSize) receiveDone = true;
     }
 
     public void receive(InputStream inputStream) {
@@ -34,12 +70,12 @@ public class DataReceiver {
 
             int numOfBytes;
             long loaded = 0;
-            while((numOfBytes = inputStream.read(buffer)) != -1) {
+            while(!receiveDone && (numOfBytes = inputStream.read(buffer)) != -1) {
                 fileOutputStream.write(buffer, 0, numOfBytes);
                 loaded += numOfBytes;
-                updateBar(loaded);
+                updateState(loaded);
+
             }
-            inputStream.close();
             System.out.println("File received.");
         } catch(IOException ex) {
             System.out.println("The server may have disconnected, failed to receive the file.");

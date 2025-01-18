@@ -18,7 +18,8 @@ public enum Status {
 
     // others
     SERIOUS_ERROR,
-    STABLE;
+    STABLE,
+    CONNECTION_TERMINATED;
 
     public static boolean isDisconnection(Status state) {
         return (state == CONNECTION_LOST || state == CLIENT_QUIT);
@@ -26,12 +27,16 @@ public enum Status {
 
 
     public static Status getStatus(String code) {
-        return switch (code) {
-            case "100" -> CONNECTION_ESTABLISHED;
-            case "101" -> FILE_SENT;
-            case "102" -> REPLY_SENT;
-            default -> STABLE;
-        };
+        switch (code) {
+            case "100":
+                return CONNECTION_ESTABLISHED;
+            case "101":
+                return FILE_SENT;
+            case "102":
+                return REPLY_SENT;
+            default:
+                return STABLE;
+        }
     }
 
 

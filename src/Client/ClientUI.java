@@ -10,14 +10,14 @@ import java.util.Scanner;
 
 public class ClientUI {
 
-    private Client client;
+    //private Client client;
     protected InputStream commandIn, connectionIn;
     protected OutputStream commandOut, connectionOut;
     public boolean isConnected;
     private Scanner scanner;
 
     public ClientUI(Client client) throws IOException {
-        this.client = client;
+        //this.client = client;
         commandIn = client.commandSocket.getInputStream();
         commandOut = client.commandSocket.getOutputStream();
         connectionIn = client.connectionSocket.getInputStream();

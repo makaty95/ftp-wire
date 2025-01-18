@@ -9,6 +9,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
+import static Common.Status.isDisconnection;
+
 public class ServerServiceThread extends Thread {
 
 
@@ -89,6 +91,9 @@ public class ServerServiceThread extends Thread {
             case Status.CLIENT_QUIT:
                 System.out.println("Client quit.");
                 break;
+            case Status.CONNECTION_TERMINATED:
+                System.out.println("Connection terminated.");
+                break;
             default:
                 System.out.println("Mysterious operation status.");
                 break;
@@ -97,7 +102,7 @@ public class ServerServiceThread extends Thread {
 
     public void terminateConnection() {
         try {
-            // terminate
+            // close all sockets
             this.connectionInStream.close();
             this.connectionOutStream.close();
             this.connectionSocket.close();
@@ -110,6 +115,8 @@ public class ServerServiceThread extends Thread {
             showMessage(Status.SERIOUS_ERROR);
         }
 
+        showMessage(Status.CONNECTION_TERMINATED);
+
     }
 
     public Status sendStatusMessage(Status state) throws IOException {
@@ -121,7 +128,7 @@ public class ServerServiceThread extends Thread {
         String message,code;
         switch (state) {
             case Status.CONNECTION_ESTABLISHED:
-                message = "Connection established with the server.";
+                message = "Connection established with the server. type cmds to see all commands.";
                 code = "100";
                 break;
 
@@ -160,7 +167,7 @@ public class ServerServiceThread extends Thread {
 
     }
 
-    public void executeCommand(Command command) throws IOException {
+    public Status executeCommand(Command command) throws IOException {
 
         // first execute the command
         Status state = new CommandServiceThread(this, command).execute();
@@ -169,10 +176,12 @@ public class ServerServiceThread extends Thread {
         showMessage(state);
 
         // send the status for that command
-        if(!(Status.isDisconnection(state))) {
+        if(!(isDisconnection(state))) {
             sendStatusMessage(state);
             showMessage(Status.REPLY_SENT);
         }
+
+        return state;
 
     }
 
@@ -201,7 +210,10 @@ public class ServerServiceThread extends Thread {
                     Command command = recieveCommand();
 
                     // execute the user command and send the status message
-                    executeCommand(command);
+                    Status state = executeCommand(command);
+                    if(isDisconnection(state)) {
+                        isConnected = false;
+                    }
                 }
             }
 
@@ -209,7 +221,6 @@ public class ServerServiceThread extends Thread {
             showMessage(Status.CONNECTION_LOST);
         }
 
-        System.out.println("terminating connection..");
         terminateConnection();
     }
 }

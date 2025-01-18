@@ -40,7 +40,7 @@ public class ReplyReceiver extends Thread {
 
     public void dispatchReply(Reply reply) {
         if(Utility.isConnectionReply(reply)) {
-            new DataReceiver(reply).receive(ui.connectionIn);;
+            new DataReceiver(reply).receive(ui.connectionIn);
 
         } else {
             displayReply(reply);

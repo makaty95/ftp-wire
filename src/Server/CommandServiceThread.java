@@ -35,7 +35,7 @@ public class CommandServiceThread  {
         long GS = MS/1024;
 
         System.out.println("File size: " + BS + "B = "+ KS + "KB = " + MS + "MB = " + GS + "GB");
-        System.out.println("Sending file..");
+        System.out.println("Sending file...");
 
         // send the file to the client.
         try(FileInputStream fileInputStream = new FileInputStream(filePath)) {
@@ -47,8 +47,6 @@ public class CommandServiceThread  {
                 serverThread.connectionOutStream.write(inputBuffer, 0, numOfBytes);
                 serverThread.connectionOutStream.flush();
             }
-            serverThread.connectionOutStream.flush();
-            serverThread.connectionOutStream.close();
 
         }catch(FileNotFoundException e) {
             return Status.INVALID_PATH;
@@ -63,29 +61,30 @@ public class CommandServiceThread  {
     public Status getCMDS() throws IOException {
         int cnt = 1;
         StringBuilder sb = new StringBuilder();
-        sb.append("\n-------------------------------------\n");
+        sb.append("\n----------------------------------------------------------------------------------------------------\n");
+        sb.append(String.format("| %-20s | %-30s | %-40s |\n","Command", "Parameters", "Description"));
+        sb.append("----------------------------------------------------------------------------------------------------\n");
         for(Map.Entry<String, CommandInfo> entry : Utility.commands.entrySet()) {
-            sb.append("[");
-            sb.append(cnt);
-            sb.append("]");
-            sb.append(entry.getKey());
-            sb.append("\t");
 
+
+            StringBuilder params = new StringBuilder();
             for(String mParam : entry.getValue().mParams) {
-                sb.append(mParam);
-                sb.append(" ");
+                params.append(mParam);
+                params.append(" ");
             }
 
             for(String oParam : entry.getValue().oParams) {
-                sb.append(oParam);
-                sb.append(" ");
+                params.append(oParam);
+                params.append(" ");
             }
 
-            sb.append(entry.getValue().description);
-            sb.append("\n");
+            sb.append(String.format("| %-20s | %-30s | %-40s |\n", "[" + cnt + "]" + entry.getKey(), params.toString(), entry.getValue().description));
+            //sb.append(String.format("| %-40s", params.toString()));
+            //sb.append(String.format("| %10s",entry.getValue().description));
+
             cnt++;
         }
-        sb.append("-------------------------------------");
+        sb.append("----------------------------------------------------------------------------------------------------\n");
 
         Reply reply = new Reply("102", sb.toString());
         serverThread.sendReply(reply);
