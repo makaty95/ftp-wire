@@ -11,19 +11,23 @@ This project is a simple FTP server implemented in Java using Socket programming
 - Command execution: Processes client commands for various operations.
 - Commands:
 
-    | Command    | Parameters                | Description                                                                                                                                         | Status             |
-    |:-----------|:--------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------|:-------------------|
-    | `cmds`     | `No parameters`           | Gets all the commands which could be sent to the server                                                                                             | :white_check_mark: |
-    | `bye`      | `No parameters`           | Terminates the connection with the server                                                                                                           | :white_check_mark: |
-    | `get_file` | `file_path`  `file_name`  | Gets a file specified with the path 'file_path'.<br/> It is optional to provide the second parameter which will change the filename to 'file_name'  | :white_check_mark: |
-
-    
+    | Command     | Parameters                       | Description                                                                                                                                                                 | Status                |
+    |:------------|:---------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:----------------------|
+    | `cmds`      | `No parameters`                  | Gets all the commands which could be sent to the server                                                                                                                     | :white_check_mark:    |
+    | `bye`       | `No parameters`                  | Terminates the connection with the server                                                                                                                                   | :white_check_mark:    |
+    | `get_file`  | `file_path`  `file_name`         | Gets a file specified with the path 'file_path'.<br/> It is optional to provide the second parameter which will change the filename to 'file_name'                          | :white_check_mark:    |
+    | `push_file` | `file_path`  `file_name`         | send a file with the path 'file_path' to the server.<br/> It is optional to provide the second parameter which will change the filename to 'file_name'                      | :black_square_button: |
+    | `ls`        | `No parameters`                  | Displays the current path files and folders                                                                                                                                 | :black_square_button: |
+    | `cd`        | `file_path`                      | changes the current access path                                                                                                                                             | :black_square_button: |
     
 ### Bugs
-- [x] Client connection disconnected accidentally when getting 2 files
-- [x] Client-side infinite loop when after receiving a file done
-- [x] file receiving percentage overflow (38893%, 5889%, ...) 
-- [ ] Server thread isn't closing when client exits
+:ballot_box_with_check: Client connection disconnected accidentally when getting 2 files
+
+:ballot_box_with_check: Client-side infinite loop when after receiving a file done
+
+:ballot_box_with_check: file receiving percentage overflow (38893%, 5889%, ...)
+
+:black_square_button: Server thread isn't closing when client exits
 
 
 ### Project Structure
