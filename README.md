@@ -21,9 +21,9 @@ This project is a simple FTP server implemented in Java using Socket programming
     | `cd`        | `file_path`                      | changes the current access path                                                                                                                                             | :black_square_button:  |
     
 ### Bugs
-:ballot_box_with_check: Client connection disconnected accidentally when getting 2 files
+:ballot_box_with_check: Client disconnected accidentally when getting 2 files
 
-:ballot_box_with_check: Client-side infinite loop when after receiving a file done
+:ballot_box_with_check: Client-side infinite loop after receiving a file done
 
 :ballot_box_with_check: file receiving percentage overflow (38893%, 5889%, ...)
 
