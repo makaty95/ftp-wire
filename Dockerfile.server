@@ -1,0 +1,16 @@
+FROM ubuntu:latest
+
+# updating the os
+RUN apt update -y
+
+# installing java
+RUN apt install -y openjdk-21-jdk
+
+# copy the server file
+COPY /out /java-app/out
+
+WORKDIR /java-app/out
+
+RUN ls -la && cd Run && ls -la
+
+ENTRYPOINT [ "java","Run.ServerR", "false"]

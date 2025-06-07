@@ -15,16 +15,22 @@ public class ClientR {
     public static void main(String[] args) throws IOException {
 
 
+        // check 
+        if(args[0].equals("true")) debug = true;
+        else if(args[0].equals("false")) debug = false;
+        else {System.out.println("Invalid debug argument!"); return;}
+
+
         if(debug) {
             Client client = new Client(
 
-                    // Server address info
-                    new InetSocketAddress("127.12.12.12", 2121).getAddress(),
-                    2121,
+                // Server address info
+                new InetSocketAddress("127.12.12.12", 2121).getAddress(),
+                2121,
 
-                    // Client address info
-                    new InetSocketAddress("127.23.12.9", 7878).getAddress(),
-                    7878
+                // Client address info
+                new InetSocketAddress("127.23.12.9", 7878).getAddress(),
+                7878
             );
 
             client.connect();

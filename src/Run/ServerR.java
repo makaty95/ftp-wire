@@ -10,6 +10,10 @@ public class ServerR {
     public static boolean debug = true;
     public static void main(String[] args) {
 
+        // check 
+        if(args[0].equals("true")) debug = true;
+        else if(args[0].equals("false")) debug = false;
+        else {System.out.println("Invalid debug argument!"); return;}
 
         try {
 
@@ -17,6 +21,7 @@ public class ServerR {
                 Utility.initializeCommands();
                 Server server = new Server(new InetSocketAddress("127.12.12.12", 2121).getAddress(), 2121);
                 server.start();
+                
             } else {
                 Scanner scanner = new Scanner(System.in);
 
