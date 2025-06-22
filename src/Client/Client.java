@@ -35,7 +35,7 @@ public class Client {
         connectionSocket = new Socket(serverAddress, serverPort, clientAddress, clientPort+1);
         System.out.println("Connection established (from client side)");
 
-        InputStream in = commandSocket.getInputStream();
+        //InputStream in = commandSocket.getInputStream();
 
         ClientUI ui = new ClientUI(this);
         ui.fire();

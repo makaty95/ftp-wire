@@ -37,8 +37,10 @@ public class ClientUI {
             sb.append(command.getParam(i));
         }
 
+        // send the command as a plain text.
         this.commandOut.write(sb.toString().getBytes());
     }
+
     private Command writeCommand() {
 
         String in;
@@ -75,6 +77,7 @@ public class ClientUI {
 
         } catch (Exception e) {
             System.out.println(e);
+            System.out.println("Unhandled Exception in ClientUI.java - 1891");
         }
 
         System.out.println("You quite.");

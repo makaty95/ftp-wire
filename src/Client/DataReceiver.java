@@ -6,13 +6,13 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class DataReceiver {
-    private         boolean     receiveDone;
-    private         double      currentPercentage;
-    private final   String      fileName;
-    private final   long        fileSize;
-    private final   char[]      loadingBar;
-    private final   char        loadingChar;
-    private final   int         barSize;
+    private       boolean   receiveDone;
+    private       double    currentPercentage;
+    private final String    fileName;
+    private final long      fileSize;
+    private final char[]    loadingBar;
+    private final char      loadingChar;
+    private final int       barSize;
 
     public DataReceiver(Reply reply) {
         System.out.println("content: " + reply.getContent());

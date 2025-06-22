@@ -3,6 +3,7 @@ package Run;
 import Client.Client;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.Scanner;
@@ -33,7 +34,14 @@ public class ClientR {
                 7878
             );
 
-            client.connect();
+            try{
+                client.connect();
+            } catch(ConnectException e) {
+                System.err.println("Connection refused - check the server state");
+            } catch (Exception e) {
+                System.err.println("Unhandled  Exception in ClientR.java - 2839");
+            }
+            
         } else {
 
             Scanner scanner = new Scanner(System.in);
@@ -127,6 +135,7 @@ public class ClientR {
             }
 
             client.connect();
+            scanner.close();
         }
 
 

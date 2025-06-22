@@ -32,7 +32,18 @@ public class Command {
     @Override
     public boolean equals(Object other) {
         Command other_cmd = (Command)other;
-        return other_cmd.getHeader().equals(this.header) && other_cmd.getParamsCount() == this.getParamsCount();
+        if(other_cmd.getHeader().equals(this.header) && other_cmd.getParamsCount() == this.getParamsCount()) {
+            int n = other_cmd.getParamsCount();
+            for(int i = 0; i<n; i++) {
+                if(!this.params.get(i).equals(other_cmd.params.get(i))) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
 
