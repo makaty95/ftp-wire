@@ -39,6 +39,8 @@ public class ClientUI {
 
         // send the command as a plain text.
         this.commandOut.write(sb.toString().getBytes());
+        commandOut.flush();
+        
     }
 
     private Command writeCommand() {

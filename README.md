@@ -6,8 +6,10 @@ This project is a simple FTP server implemented in Java using Socket programming
  
 ### Features
 
-  - Multi-client support: Handles multiple client connections simultaneously.
-  - File transfer: Enables clients to upload and download files.
+- Multi-client support: Handles multiple client connections simultaneously.
+- Scalability: hadles high load of clients requests using Thread Pool Architecture
+- Support of NonBlocking IO: increases Server performance and utilizes the CPU processing 
+- File transfer: Enables clients to download files from another machine.
 - Command execution: Processes client commands for various operations.
 - Commands:
 
@@ -27,7 +29,13 @@ This project is a simple FTP server implemented in Java using Socket programming
 
 :ballot_box_with_check: file receiving percentage overflow (38893%, 5889%, ...)
 
-:black_square_button: Server thread isn't closing when client exits
+:ballot_box_with_check: Server client sockets isn't closing when client exits
+
+:black_square_button: When 2 Clients order the same file at the same time using different threads, the server serves them sequentially instead of parallel
+
+:black_square_button: When Client exits without $bye$ command, the server have no idea
+
+
 
 
 ### Project Structure
@@ -41,9 +49,16 @@ FTP-Server/
     │   ├── DataReceiver.java
     │   └── ReplyReceiver.java
     ├── Server/
+    |   |── Functionalities/
+    |   |   └── Core/
+    |   |       |── SendCMDS.java
+    |   |       |── SendFile.java
+    |   |       └── SendReply.java
+    |   | 
     │   ├── Server.java
-    │   ├── ServerServiceThread.java
-    │   └── CommandServiceThread.java
+    │   ├── ServerService.java
+    │   ├── Task.java
+    │   └── ThreadPool.java
     └── Common/
         ├── Command.java
         |── CommandInfo.java
@@ -55,7 +70,11 @@ FTP-Server/
 - Client: Contains client-side classes which can connect to the server, send commands and receive replies and data
 - Common: Includes shared utilities and data structures used by both server and client components.
 - ## Resources used
-    - https://www.rfc-editor.org/rfc/rfc959
-    - https://www.hostitsmart.com/manage/knowledgebase/392/What-is-the-Difference-Between-HTTP-and-FTP.html
-    - http://www.nsftools.com/tips/RawFTP.htm
+  - https://www.rfc-editor.org/rfc/rfc959
+  - https://www.hostitsmart.com/manage/knowledgebase/392/What-is-the-Difference-Between-HTTP-and-FTP.html
+  - http://www.nsftools.com/tips/RawFTP.htm
   
+
+- ## System Diagrams
+  ![Functions](https://drive.google.com/file/d/1MVRgoa5Gu2QSecNyey3JaXACOxWJc4pF)
+  ![PipeLine](https://drive.google.com/file/d/1ZvQPat1uQB_LYnOShvE8MNTIVnmFv0La)

@@ -2,20 +2,27 @@ package Server;
 
 import java.io.IOException;
 import java.net.*;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
+
+import Common.Status;
 
 public class Server {
-    private final InetAddress serverAddress;
-    private final int serverPort;
+    private final InetSocketAddress serverAddress;
+    private ServerService serverService;
 
-    public Server(InetAddress ipAddress, int port) {
+    public Server(InetSocketAddress ipAddress) throws IOException {
+        serverService = new ServerService();
         this.isServerRunning = true;
         this.serverAddress = ipAddress;
-        this.serverPort = port;
+
+        
     }
 
     // as a default thing ip will be the local machine ip
-    public Server() throws UnknownHostException {
-        this(InetAddress.getLocalHost(), 2121);
+    public Server() throws UnknownHostException, IOException {
+        this(new InetSocketAddress("localhost", 2121));
     }
 
     boolean isServerRunning;
@@ -23,19 +30,55 @@ public class Server {
 
         // start the server
         System.out.println("Starting server...");
-        ServerSocket serverSocket = new ServerSocket(serverPort, 50, serverAddress);
+        //ServerSocket serverSocket = new ServerSocket(serverPort, 50, serverAddress);
+
+        
+        // new InetServerA
+        ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
+        serverSocketChannel.bind(serverAddress);
+        
+        // starting the service
+        serverService.start();
 
         while(isServerRunning) {
-            System.out.println("[" +serverSocket.getInetAddress().getHostAddress() + "] Listening for clients...");
+            System.out.println("[" +serverSocketChannel.socket().getInetAddress().getHostAddress() + "] Listening for clients...");
 
+            /////////////////////////////////////////////////////////////
             // accept client connection
-            Socket commandSocket = serverSocket.accept();
-            Socket connectionSocket = serverSocket.accept();
+            SocketChannel commandSocket_ch = serverSocketChannel.accept();
+            SocketChannel connectionSocket_ch = serverSocketChannel.accept();
+            
+            // Socket commandSocket = serverSocket.accept();
+            // Socket connectionSocket = serverSocket.accept();
+            ////////////////////////////////////////////////////////////
+            System.out.println("[CMD:" + commandSocket_ch.socket().getRemoteSocketAddress() + " - CON:"
+                    + connectionSocket_ch.socket().getRemoteSocketAddress() + "] " + "Connected.");
 
-            System.out.println("[CMD:" + commandSocket.getRemoteSocketAddress() + " - CON:"
-                    + connectionSocket.getRemoteSocketAddress() + "] " + "Connected.");
+            //new ServerServiceThread(commandSocket, connectionSocket).start();
 
-            new ServerServiceThread(commandSocket, connectionSocket).start();
+            // send a verification message to the client
+            serverService.showMessage(serverService.sendStatusMessage(Status.CONNECTION_ESTABLISHED, commandSocket_ch));
+            
+            // NonBlocking IO
+            commandSocket_ch.configureBlocking(false);
+            commandSocket_ch.register(this.serverService.commandSelector, SelectionKey.OP_READ);
+            
+            // wakup
+            this.serverService.commandSelector.wakeup();
+            
+            // add thee link between the 2 hashes.
+            this.serverService.addToHashStore(commandSocket_ch, connectionSocket_ch);
+
+
+            System.out.println("Entry pushed in the NonBlocking IO");
+            System.out.println("selector size: " + serverService.commandSelector.keys().size());
+
+
+            /* Map:
+             * commandSocketHashCode -> connectionSocketHashCode
+             */
+
+            
 
 
         }

@@ -66,6 +66,7 @@ public class ReplyReceiver extends Thread {
 
         } catch (Exception e) {
             System.out.println("Server disconnected");
+            System.err.println(e);
         }
 
 

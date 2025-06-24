@@ -39,10 +39,11 @@ public class DataReceiver {
     }
 
     public void updateLoadingBar() {
-        int threshold = (int)currentPercentage * barSize / 100;
+        int threshold = ((int)currentPercentage) * barSize / 100;
         for(int i = 0; i<threshold; i++) {
             loadingBar[i] = loadingChar;
         }
+
     }
 
     public void updatePercentage(long loaded) {

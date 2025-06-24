@@ -40,6 +40,7 @@ public class ClientR {
                 System.err.println("Connection refused - check the server state");
             } catch (Exception e) {
                 System.err.println("Unhandled  Exception in ClientR.java - 2839");
+                
             }
             
         } else {

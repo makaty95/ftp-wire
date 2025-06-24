@@ -19,7 +19,7 @@ public class ServerR {
 
             if(debug) { // for development
                 Utility.initializeCommands();
-                Server server = new Server(new InetSocketAddress("127.12.12.12", 2121).getAddress(), 2121);
+                Server server = new Server(new InetSocketAddress("127.12.12.12", 2121));
                 server.start();
                 
             } else {
@@ -55,7 +55,7 @@ public class ServerR {
 
                         // initialize
                         try{
-                            server = new Server(new InetSocketAddress(IP, Integer.parseInt(Port)).getAddress(), Integer.parseInt(Port));
+                            server = new Server(new InetSocketAddress(IP, Integer.parseInt(Port)));
                         }catch(NumberFormatException e) {
                             System.out.println("The port is incorrect");
                             retry = true;
