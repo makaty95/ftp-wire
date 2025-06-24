@@ -76,5 +76,5 @@ FTP-Server/
   
 
 - ## System Diagrams
-  ![Functions](https://drive.google.com/file/d/1MVRgoa5Gu2QSecNyey3JaXACOxWJc4pF)
-  ![PipeLine](https://drive.google.com/file/d/1ZvQPat1uQB_LYnOShvE8MNTIVnmFv0La)
+  ![PipeLine](images/FTP%20pipeline.drawio.png)
+  ![Functions](images/Server_funcs.jpg)
