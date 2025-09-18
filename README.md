@@ -1,80 +1,188 @@
-# FTP-Server
-This project is a simple FTP server implemented in Java using Socket programming, designed to handle client connections and facilitate file transfers.
+<p align="center">
+  <img src='https://img.shields.io/badge/Java-8%2B-blue?logo=java&logoColor=white' />
+  <img src='https://img.shields.io/badge/build-passing-brightgreen' />
+  <img src='https://img.shields.io/badge/license-MIT-yellow' />
+  <img src='https://img.shields.io/github/issues/makaty95/ftp-server' /> <br>
+  <img src='https://img.shields.io/github/stars/makaty95/ftp-server?style=social' />
+  <img src='https://img.shields.io/github/forks/makaty95/ftp-server?style=social' />
 
-### Prerequisites
-  - Java Development Kit (JDK): Ensure JDK 8 or higher is installed.
- 
-### Features
 
-- Multi-client support: Handles multiple client connections simultaneously.
-- Scalability: hadles high load of clients requests using Thread Pool Architecture
-- Support of NonBlocking IO: increases Server performance and utilizes the CPU processing 
-- File transfer: Enables clients to download files from another machine.
-- Command execution: Processes client commands for various operations.
-- Commands:
+</p>
 
-    | Command     | Parameters                       | Description                                                                                                                                                                 |         Status         |
-    |:------------|:---------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:----------------------:|
-    | `cmds`      | `No parameters`                  | Gets all the commands which could be sent to the server                                                                                                                     |   :white_check_mark:   |
-    | `bye`       | `No parameters`                  | Terminates the connection with the server                                                                                                                                   |   :white_check_mark:   |
-    | `get_file`  | `file_path`  `file_name`         | Gets a file specified with the path 'file_path'.<br/> It is optional to provide the second parameter which will change the filename to 'file_name'                          |   :white_check_mark:   |
-    | `push_file` | `file_path`  `file_name`         | send a file with the path 'file_path' to the server.<br/> It is optional to provide the second parameter which will change the filename to 'file_name'                      | :black_square_button:  |
-    | `ls`        | `No parameters`                  | Displays the current path files and folders                                                                                                                                 | :black_square_button:  |
-    | `cd`        | `file_path`                      | changes the current access path                                                                                                                                             | :black_square_button:  |
-    
-### Bugs
-:ballot_box_with_check: Client connection disconnected accidentally when getting 2 files
+<p align="center">
+  <img width="700" height="300" alt="Image" src="https://github.com/user-attachments/assets/c3fb5f79-b2fd-4501-b7ba-3f31ce5b036d" />
+</p>
 
-:ballot_box_with_check: Client-side infinite loop when after receiving a file done
-
-:ballot_box_with_check: file receiving percentage overflow (38893%, 5889%, ...)
-
-:ballot_box_with_check: Server client sockets isn't closing when client exits
-
-:black_square_button: When 2 Clients order the same file at the same time using different threads, the server serves them sequentially instead of parallel
-
-:black_square_button: When Client exits without $bye$ command, the server have no idea
+<h4 align='center'> A simple extensible FTP server implemented in Java. </h4>
 
 
 
+---
 
-### Project Structure
-``` plaintext
-Copy code
-FTP-Server/
-└── src/
-    ├── Client/
-    │   ├── Client.java
-    │   ├── ClientUI.java
-    │   ├── DataReceiver.java
-    │   └── ReplyReceiver.java
-    ├── Server/
-    |   |── Functionalities/
-    |   |   └── Core/
-    |   |       |── SendCMDS.java
-    |   |       |── SendFile.java
-    |   |       └── SendReply.java
-    |   | 
-    │   ├── Server.java
-    │   ├── ServerService.java
-    │   ├── Task.java
-    │   └── ThreadPool.java
-    └── Common/
-        ├── Command.java
-        |── CommandInfo.java
-        ├── Reply.java
-        ├── Status.java
-        └── Utility.java
+## 📌 Prerequisites
+- ☕ **Java Development Kit (JDK)**: Version **8 or higher**
+
+---
+
+## ✨ Features
+-  **Multi-client support** – handles multiple connections simultaneously.
+-  **Scalable & High-performance** – uses **Thread Pool architecture** and **Non-blocking I/O (NIO)**.
+-  **File transfer** – clients can download files from the server.
+- **Command execution** – processes various client commands.
+-  **Logging & Monitoring system** – structured logs via `ClientLogger` / `ServerLogger` or debugging, tracking client activity, and monitoring transfers.
+-  **Error handling & Disconnection discovery** – Clean detection of remote disconnections and graceful shutdown/termination logic of client disconnections.
+-  **Extensible design patterns** – leverages reusable patterns for future extensions.
+
+---
+
+## 📜 Supported Commands
+
+| Command | Parameters               | Description                                                                                                               | Status |
+|:--------|:-------------------------|:--------------------------------------------------------------------------------------------------------------------------|:------:|
+| `HELP`  | `No parameters`          | Lists all supported commands                                                                                              | ✅ |
+| `QUIT`  | `No parameters`          | Terminates the client connection                                                                                          | ✅ |
+| `RETR`  | `file_path` `file_name`  | Retrieves a file from the server. Optionally rename it by providing `file_name`.                                          | ✅ |
+| `STOR`  | `file_path` `file_name`  | Uploads a file to the server. Optionally rename it by providing `file_name`.                                              | ⬜ |
+| `PWD`   | `No parameters`          | Displays the current working directory                                                                                    | ⬜ |
+| `CWD`   | `directory_path`         | Changes the current working directory                                                                                     | ⬜ |
+
+✅ = Implemented & tested  
+⬜ = Planned
+
+---
+
+## 📂 Project Structure
+```plaintext
+├── Client
+│   │
+│   ├── Controllers
+│   │   ├── CommandController.java
+│   │   └── DataController.java
+│   │
+│   ├── Loggers
+│   │   └── ClientLogger.java
+│   │
+│   ├── ReplyHandlers
+│   │   ├── FILE_INFO_ReplyHandler.java
+│   │   ├── MESSAGE_ReplyHandler.java
+│   │   └── ReplyHandler.java  
+│   │ 
+│   │        
+│   ├── Models
+│   │   ├── ClientConfig.java
+│   │   ├── CommandSender.java
+│   │   ├── ConnectionManager.java
+│   │   ├── LoggerManager.java
+│   │   ├── Reply.java
+│   │   ├── ReplyPacketFactory.java
+│   │   └── ResponseReceiver.java
+│   │
+│   └── Client.java
+│
+├── clientCLI
+│   ├── ClientCLI.java
+│   └── ClientCLILogger.java
+│
+├── Common
+│   │
+│   ├── Exceptions
+│   │   └── RemoteDisconnectionException.java
+│   │
+│   ├── Loggers
+│   │   └── Logger.java
+│   │
+│   ├── Models
+│   │   ├── Command.java
+│   │   └── Status.java
+│   │
+│   ├── Packets
+│   │   ├── Communication
+│   │   │   ├── CommandPacket.java
+│   │   │   └── ReplyPacket.java
+│   │   │
+│   │   ├── HansShaking
+│   │   │   ├── DonePacket.java
+│   │   │   ├── HelloPacket.java
+│   │   │   ├── PairPacket.java
+│   │   │   └── WelcomePacket.java
+│   │   │
+│   │   └── IO
+│   │       ├── PacketReader.java
+│   │       ├── PacketWriter.java
+│   │       └── Packet.java
+│   │   
+│   │   
+│   │── Serialization
+│   │   └── PacketSerializer.java
+│   │
+│   │
+│   └── Types
+│       ├── PacketType.java
+│       └── ReplyType.java
+│    
+├── Server
+│   ├── Exceptions
+│   │   ├── CanNotReadPacketException.java
+│   │   └── NoCommandWithSpecifiedHeaderException.java
+│   │
+│   ├── Handlers
+│   │   ├── CommandErrorHandler.java
+│   │   ├── CommandHandler.java
+│   │   ├── ErrorHandler.java
+│   │   ├── HelpCommandHandler.java
+│   │   ├── QuitCommandHandler.java
+│   │   └── RetrieveFileCommandHandler.java
+│   │
+│   ├── HandShaking
+│   │   ├── HandShakeManager.java
+│   │   └── Session.java
+│   │
+│   ├── Loggers
+│   │   ├── ServerCLILogger.java
+│   │   └── ServerLogger.java
+│   │
+│   ├── Models
+│   │   ├── Types
+│   │   │   ├── CommandType.java
+│   │   │   └── ErrorType.java
+│   │   │
+│   │   ├── ClientProfile.java
+│   │   ├── UserConnection.java
+│   │   ├── TaskDispatcher.java
+│   │   ├── ServerConfig.java
+│   │   ├── CommandSelectorDispatcher.java
+│   │   └── ThreadPool.java
+│   │
+│   │
+│   ├── Registeries
+│   │   ├── CommandRegistry.java
+│   │   └── SessionRegistry.java
+│   │
+│   │
+│   ├── SocketAcceptors
+│   │   ├── CommandSocketAcceptor.java
+│   │   └── DataSocketAcceptor.java
+│   │
+│   ├── Tasks
+│   │   ├── CommandTask.java
+│   │   ├── DataTask.java
+│   │   ├── SendFileTask.java
+│   │   ├── SendPacketTask.java
+│   │   └── Task.java
+│   │
+│   │
+│   ├── Regist
+│   │   ├── CommandTask.java
+│   │   ├── DataTask.java
+│   │   ├── SendFileTask.java
+│   │   ├── SendPacketTask.java
+│   │   └── Task.java
+│   │
+│   └── Server.java
+│
+│
+└── Run
+    ├── Client_CLI.java
+    └── Server_CLI.java
+
 ```
-- Server: Contains server-side classes managing client connections and command execution.
-- Client: Contains client-side classes which can connect to the server, send commands and receive replies and data
-- Common: Includes shared utilities and data structures used by both server and client components.
-- ## Resources used
-  - https://www.rfc-editor.org/rfc/rfc959
-  - https://www.hostitsmart.com/manage/knowledgebase/392/What-is-the-Difference-Between-HTTP-and-FTP.html
-  - http://www.nsftools.com/tips/RawFTP.htm
-  
-
-- ## System Diagrams
-  ![PipeLine](images/FTP%20pipeline.drawio.png)
-  ![Functions](images/Server_funcs.jpg)
