@@ -81,6 +81,28 @@ public enum OfflineCommandType {
         new String[]{}
     ),
 
+    CONN_INFO(
+            (command, client, terminal) -> {
+                StringBuilder sb = new StringBuilder();
+
+                // remote
+                sb.append("Remote:\n").append("\t IP: ").append(client.getRemoteHost()).append("\n");
+                sb.append("\t PORT: ").append(client.getRemotePort()).append("\n");
+
+                // local
+                sb.append("Local:\n").append("\t IP: ").append(client.getLocalHost()).append("\n");
+                sb.append("\t PORT: ").append(client.getLocalPort()).append("\n");
+                sb.append("\t Username: ").append(client.getUserName()).append("\n");
+
+                terminal.writer().write(sb.toString());
+                terminal.flush();
+            },
+            "conn_info",
+            "display info about both local and remote connection.",
+            new String[]{},
+            new String[]{}
+    ),
+
     HELP(
             (command, client, terminal) -> {
                 terminal.writer().print(OfflineCommandType.getCommandsInfo());

@@ -71,6 +71,13 @@ public class Client {
         return ClientConfig.USER_NAME;
     }
 
+    public String getRemoteHost() {return ClientConfig.REMOTE_HOST;}
+
+    public String getLocalHost() {return ClientConfig.LOCAL_HOST;}
+
+    public int getRemotePort() {return ClientConfig.REMOTE_PORT;}
+
+    public int getLocalPort() {return ClientConfig.LOCAL_PORT;}
 
 
     // Server interaction
