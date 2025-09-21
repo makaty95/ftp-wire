@@ -1,6 +1,7 @@
 package com.makaty.code.Client.Controllers;
 
 import com.makaty.code.Client.Models.CommandSender;
+import com.makaty.code.Client.Models.LoggerManager;
 import com.makaty.code.Client.Models.ResponseReceiver;
 import com.makaty.code.Common.Models.Command;
 
@@ -9,11 +10,10 @@ import java.rmi.ConnectIOException;
 public class CommandController {
 
     private final CommandSender commandSender;
-    private final ResponseReceiver responseReceiver;
+    private ResponseReceiver responseReceiver;
     private static CommandController instance;
 
     private CommandController() {
-        responseReceiver = new ResponseReceiver();
         commandSender = new CommandSender();
     }
 
@@ -26,7 +26,12 @@ public class CommandController {
 
 
     public void startReceiver() {
-        responseReceiver.start();
+        if (responseReceiver == null || !responseReceiver.isAlive()) {
+            responseReceiver = new ResponseReceiver();
+            responseReceiver.start();
+        } else {
+            LoggerManager.getInstance().warn("ResponseReceiver already running!");
+        }
     }
 
     public void sendCommand(Command command) {

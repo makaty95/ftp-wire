@@ -26,8 +26,6 @@ public class ClientCLI {
         client = new Client();
         client.addLogger(new ClientCLILogger(terminal));
 
-        running = true;
-
         System.out.println("Terminal type: " + terminal.getType());
     }
 
@@ -74,9 +72,7 @@ public class ClientCLI {
         String flag = ">> ";
         String message = "[1] Enter custom IP and Port\n[2] Continue with my machine private network\n";
 
-
         String S_IP, S_PORT;
-
 
         // server ip
         message = "Enter Server IP";
@@ -91,46 +87,37 @@ public class ClientCLI {
     }
 
 
-    private void initConnection() {
-        client.initConnection();
-    }
+
 
     public void fire() {
 
-        setInfo();
+        running = true;
 
-        // Always init connection (will be triggered by the user in the future)
-        initConnection();
-
-        try{
-            while(running) {
+        while(running) {
 
 
-                if(client.isConnected()) {
-                    // write command
-                    Command command = writeCommand();
+            if(client.isConnected()) {
+                // write command
+                Command command = writeCommand();
 
-                    // send command to server
+                // send command to server
+                try {
                     sendCommand(command);
-                } else {
-                    terminal.writer().println("-- Disconnected mod --");
-                    terminal.writer().println("-- press any key to exit --");
+                } catch (IOException e) {
+                    terminal.writer().println("Failed to send command to remote!");
                     terminal.writer().flush();
-                    reader.readLine();
-                    running = false;
-
-                    //TODO: handle a local command
-                    // local commands are commands used to configure user aspects like username, remote host, port, etc...
                 }
+            } else {
+                terminal.writer().println("-- Offline mode --");
+                terminal.writer().flush();
+
+                //TODO: handle a local command
+                new OfflineClientCLI(terminal, client).start();
 
             }
 
-
-
-        } catch (Exception e) {
-            //TODO: add logs here
-
         }
+
 
     }
 

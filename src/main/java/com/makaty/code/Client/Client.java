@@ -7,7 +7,6 @@ import com.makaty.code.Client.Models.ClientConfig;
 import com.makaty.code.Client.Models.ConnectionManager;
 import com.makaty.code.Client.Models.LoggerManager;
 import com.makaty.code.Common.Models.Command;
-import com.makaty.code.Common.Models.Status;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -45,21 +44,24 @@ public class Client {
 
         // validate port
         if (port < 1 || port > 65535) {
-            throw new IllegalArgumentException("Port must be between 1 and 65535");
+            LoggerManager.getInstance().error("Port must be between 1 and 65535.\n");
+            return;
         }
 
         // validate host
         if (!isValidHost(host)) {
-            throw new IllegalArgumentException("Invalid host: " + host);
+            LoggerManager.getInstance().error(String.format("Invalid host: %s.\n", host));
+            return;
         }
 
-        ClientConfig.HOST_NAME = host;
-        ClientConfig.PORT = port;
+        ClientConfig.LOCAL_HOST = host;
+        ClientConfig.LOCAL_PORT = port;
     }
 
     public void setUserName(String userName) {
         if(userName.isEmpty()) {
-            throw new IllegalArgumentException("Provided username is empty");
+            LoggerManager.getInstance().error("Username can't be empty!\n");
+            return;
         }
 
         ClientConfig.USER_NAME = userName;
@@ -85,12 +87,9 @@ public class Client {
     // Connection configuration
     public void initConnection() {
         try {
-            Status state = ConnectionManager.getInstance().initConnection();
-            //TODO: use state value
-            CommandController.getInstance().startReceiver();
+            ConnectionManager.getInstance().initConnection();
         } catch (IOException e) {
-            //TODO: add logs here
-            throw new RuntimeException(e);
+            LoggerManager.getInstance().error(e.getMessage());
         }
     }
 
@@ -106,15 +105,17 @@ public class Client {
 
         // validate port
         if (port < 1 || port > 65535) {
-            throw new IllegalArgumentException("Port must be between 1 and 65535");
+            LoggerManager.getInstance().error("Port must be between 1 and 65535.\n");
+            return;
         }
 
         // validate host
         if (!isValidHost(host)) {
-            throw new IllegalArgumentException("Invalid host: " + host);
+            LoggerManager.getInstance().error("Invalid host: " + host + "\n");
         }
 
-        ConnectionManager.getInstance().setRemoteCommandSocketAddress(new InetSocketAddress(host, port));
+        ClientConfig.REMOTE_HOST = host;
+        ClientConfig.REMOTE_PORT = port;
     }
 
     public void terminateConnection() throws ConnectIOException {

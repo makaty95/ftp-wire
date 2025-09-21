@@ -6,6 +6,7 @@ testFiles/
 storage/
 target/
 .idea/
+Notes.txt
 
 ### Eclipse ###
 .apt_generated
