@@ -31,6 +31,7 @@ public enum OfflineCommandType {
                 client.setRemoteHost(hostname, port);
             } catch (NumberFormatException e) {
                 terminal.writer().println("Invalid port - enter an integer.");
+                terminal.writer().flush();
             }
         },
         "set_remote",
@@ -48,6 +49,7 @@ public enum OfflineCommandType {
                 client.setLocalHost(hostname, port);
             } catch (NumberFormatException e) {
                 terminal.writer().println("Invalid port - enter an integer.");
+                terminal.writer().flush();
             }
         },
         "set_local",
@@ -62,6 +64,7 @@ public enum OfflineCommandType {
                 client.initConnection();
             } catch (NumberFormatException e) {
                 terminal.writer().println("Invalid port - enter an integer.");
+                terminal.writer().flush();
             }
         },
         "connect",
@@ -106,6 +109,7 @@ public enum OfflineCommandType {
     HELP(
             (command, client, terminal) -> {
                 terminal.writer().print(OfflineCommandType.getCommandsInfo());
+                terminal.writer().flush();
             },
             "help",
             "display commands info list.",
@@ -234,7 +238,7 @@ public enum OfflineCommandType {
             }
         }
 
-        throw new NoCommandWithSpecifiedHeaderException("'%s' is not recognized as an internal or external command" + command.getHeader());
+        throw new NoCommandWithSpecifiedHeaderException(String.format("'%s' is not recognized as an internal or external command", command.getHeader()));
 
     }
 

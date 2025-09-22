@@ -57,38 +57,6 @@ public class ClientCLI {
         return ret;
     }
 
-    private String getCLIInfo(String message, String flag, boolean empty) {
-        String buffer;
-        do{
-            buffer = reader.readLine(String.format("%s %s", message, flag));
-        }while(buffer.isBlank() && !empty);
-
-        return buffer;
-    }
-
-
-    private void setInfo() {
-
-        String flag = ">> ";
-        String message = "[1] Enter custom IP and Port\n[2] Continue with my machine private network\n";
-
-        String S_IP, S_PORT;
-
-        // server ip
-        message = "Enter Server IP";
-        S_IP = getCLIInfo(message, flag, false);
-
-        // server port
-        message = "Enter Server Port";
-        S_PORT = getCLIInfo(message, flag, false);
-
-        client.setRemoteHost(S_IP, Integer.parseInt(S_PORT));
-
-    }
-
-
-
-
     public void fire() {
 
         running = true;

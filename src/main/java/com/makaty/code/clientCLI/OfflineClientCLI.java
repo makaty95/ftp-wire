@@ -52,6 +52,7 @@ public class OfflineClientCLI {
             if(type == OfflineCommandType.INIT_CONNECTION) {this.terminate();}
         } catch (NoCommandWithSpecifiedHeaderException | CommandFormatException e) {
             terminal.writer().println(e.getMessage());
+            terminal.writer().flush();
         }
 
     }
