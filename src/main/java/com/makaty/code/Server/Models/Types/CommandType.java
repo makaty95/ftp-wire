@@ -1,5 +1,7 @@
 package com.makaty.code.Server.Models.Types;
 
+import com.makaty.code.Common.Exceptions.CommandFormatException;
+import com.makaty.code.Common.UtilityFunctions;
 import com.makaty.code.Server.Handlers.CommandHandler;
 import com.makaty.code.Server.Handlers.HelpCommandHandler;
 import com.makaty.code.Server.Handlers.QuitCommandHandler;
@@ -7,6 +9,7 @@ import com.makaty.code.Server.Handlers.RetrieveFileCommandHandler;
 import com.makaty.code.Server.Exceptions.NoCommandWithSpecifiedHeaderException;
 import com.makaty.code.Common.Models.Command;
 
+import java.util.List;
 import java.util.function.Supplier;
 
 
@@ -79,7 +82,53 @@ public enum CommandType {
         this.commandHandlerSupplier = commandHandlerSupplier;
     }
 
-    public boolean isValidSignature(Command command) {
+
+
+    private static String buildCommandsInfo() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n----------------------------------------------------------------------------------------------------\n");
+        sb.append(String.format("| %-20s | %-30s | %-40s |\n", "Command", "Parameters", "Description"));
+        sb.append("----------------------------------------------------------------------------------------------------\n");
+
+        int cnt = 1;
+        for (CommandType com : CommandType.values()) {
+            // Build params string
+            StringBuilder params = new StringBuilder();
+            for (String param : com.mandatoryParams) {
+                params.append("<").append(param).append("> ");
+            }
+            for (String param : com.optionalParams) {
+                params.append("(").append(param).append(") ");
+            }
+
+            // Wrap params and description
+            List<String> wrappedParams = UtilityFunctions.wrap(params.toString().trim(), 30);
+            List<String> wrappedDesc = UtilityFunctions.wrap(com.description, 40);
+
+            // Get max number of lines needed for this row
+            int maxLines = Math.max(wrappedParams.size(), wrappedDesc.size());
+
+            // Print row(s)
+            for (int i = 0; i < maxLines; i++) {
+                String commandCol = (i == 0 ? "[" + cnt + "]" + com.header : "");
+                String paramCol   = (i < wrappedParams.size() ? wrappedParams.get(i) : "");
+                String descCol    = (i < wrappedDesc.size() ? wrappedDesc.get(i) : "");
+
+                sb.append(String.format("| %-20s | %-30s | %-40s |\n", commandCol, paramCol, descCol));
+            }
+
+            cnt++;
+        }
+
+        sb.append("----------------------------------------------------------------------------------------------------\n");
+        return sb.toString();
+    }
+    public static final String COMMANDS_INFO = buildCommandsInfo();
+    private static String getCommandsInfo() {return COMMANDS_INFO;}
+
+
+
+    public boolean isValidSignature(Command command)  {
         boolean ok =
                 command.getParamsCount() <= getMaxArgsCount() &&
                 command.getParamsCount() >= getMinArgsCount();
@@ -87,13 +136,13 @@ public enum CommandType {
 
     }
 
-    public static CommandType typeOf(String header) throws NoCommandWithSpecifiedHeaderException {
+    public static CommandType typeOf(Command command) throws NoCommandWithSpecifiedHeaderException {
         for(CommandType type : CommandType.values()) {
-            if(type.getHeader().equals(header.toLowerCase())) {
+            if(type.header.equals(command.getHeader().toLowerCase())) {
                 return type;
             }
         }
-        throw new NoCommandWithSpecifiedHeaderException("Provided header: " + header);
+        throw new NoCommandWithSpecifiedHeaderException("Provided header: " + command.getHeader());
     }
 
 }

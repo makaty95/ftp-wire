@@ -123,9 +123,8 @@ public class CommandSelectorDispatcher extends Thread {
 
                     try {
                         // determining the type of the command
-                        commandType = CommandType.typeOf(commandPacket.getCommand().getHeader());
+                        commandType = CommandType.typeOf(commandPacket.getCommand());
                     } catch (NoCommandWithSpecifiedHeaderException e) {
-                        //TODO: handle wrong commands
                         TaskDispatcher.getInstance().submitAsyncTask(() ->
                                 new CommandErrorHandler().handle(ErrorType.INVALID_COMMAND, session)
                         );

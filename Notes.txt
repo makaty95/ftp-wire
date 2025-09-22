@@ -1,0 +1,17 @@
+CLIENT BUGS:
+1) when typing connect without the remote and local specification we get NullPointerException [solved]
+2) when connecting to remote then quitting, and then connection again, some thread exception is thrown [solved]
+3) when quitting remote, i have to call set_remote again [solved]
+4) when quitting with quit command i get this: [WARNING]: Remote server disconnected. :
+for this look at the last chat gpt query, he gave a good solution. [solved]
+
+CLIENT OPTIMIZATIONS:
+1) set_remote 127.12.12.12 gets "Invalid command", it should say something more specific. [solved]
+
+CLIENT FEATURES:
+1) add command to show available commands in offline mode [solved]
+
+----------------------------------------------------------------------------------------------
+
+SERVER OPTIMIZATIONS:
+1) delete the CommandRegistry and integrate the content inside the CommandType enum

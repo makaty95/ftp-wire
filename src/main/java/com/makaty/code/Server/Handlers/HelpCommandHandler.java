@@ -5,7 +5,6 @@ import com.makaty.code.Common.Models.Command;
 import com.makaty.code.Common.Packets.Communication.ReplyPacket;
 import com.makaty.code.Common.Types.ReplyType;
 import com.makaty.code.Server.Handshaking.Session;
-import com.makaty.code.Server.Registries.CommandRegistry;
 import com.makaty.code.Server.Tasks.SendPacketTask;
 import com.makaty.code.Server.Models.*;
 import com.makaty.code.Server.Models.Types.CommandType;
@@ -30,13 +29,13 @@ public class HelpCommandHandler implements CommandHandler {
         // 1) validate it is in a valid shape
         if(!CommandType.HELP.isValidSignature(command)) {
             TaskDispatcher.getInstance().submitAsyncTask(() ->
-                    new CommandErrorHandler().handle(ErrorType.INVALID_COMMAND, clientSession)
+                    new CommandErrorHandler().handle(ErrorType.INVALID_COMMAND_PARAMS, clientSession)
             );
             return null;
         }
 
         // creating response packet which have the descriptions to the commands
-        ReplyPacket replyPacket = ReplyType.MESSAGE.createPacket(CommandRegistry.HELP_COMMANDS);
+        ReplyPacket replyPacket = ReplyType.MESSAGE.createPacket(CommandType.COMMANDS_INFO);
 
         // submitting task to the dispatcher
         TaskDispatcher.getInstance().submitAsyncTask(new SendPacketTask(clientSession.getClientProfile(), replyPacket));

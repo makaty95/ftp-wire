@@ -38,7 +38,7 @@ public class RetrieveFileCommandHandler implements CommandHandler {
             /// 1) log some logs with the logger
             /// 2) schedule a proper message to the client
             TaskDispatcher.getInstance().submitAsyncTask(() ->
-                    new CommandErrorHandler().handle(ErrorType.INVALID_COMMAND, clientSession)
+                    new CommandErrorHandler().handle(ErrorType.INVALID_COMMAND_PARAMS, clientSession)
             );
             return null;
         }
