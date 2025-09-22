@@ -26,8 +26,6 @@ public class ClientCLI {
         client = new Client();
         client.addLogger(new ClientCLILogger(terminal));
 
-        running = true;
-
         System.out.println("Terminal type: " + terminal.getType());
     }
 
@@ -59,78 +57,63 @@ public class ClientCLI {
         return ret;
     }
 
-    private String getCLIInfo(String message, String flag, boolean empty) {
-        String buffer;
-        do{
-            buffer = reader.readLine(String.format("%s %s", message, flag));
-        }while(buffer.isBlank() && !empty);
-
-        return buffer;
-    }
-
-
-    private void setInfo() {
-
-        String flag = ">> ";
-        String message = "[1] Enter custom IP and Port\n[2] Continue with my machine private network\n";
-
-
-        String S_IP, S_PORT;
-
-
-        // server ip
-        message = "Enter Server IP";
-        S_IP = getCLIInfo(message, flag, false);
-
-        // server port
-        message = "Enter Server Port";
-        S_PORT = getCLIInfo(message, flag, false);
-
-        client.setRemoteHost(S_IP, Integer.parseInt(S_PORT));
-
-    }
-
-
-    private void initConnection() {
-        client.initConnection();
-    }
-
     public void fire() {
 
-        setInfo();
+        running = true;
+        String banner = """
 
-        // Always init connection (will be triggered by the user in the future)
-        initConnection();
+                           ___  __                                                   \s
+                         /'___\\/\\ \\__                               __               \s
+                        /\\ \\__/\\ \\ ,_\\  _____            __  __  __/\\_\\  _ __    __  \s
+                        \\ \\ ,__\\\\ \\ \\/ /\\ '__`\\  _______/\\ \\/\\ \\/\\ \\/\\ \\/\\`'__\\/'__`\\\s
+                         \\ \\ \\_/ \\ \\ \\_\\ \\ \\L\\ \\/\\______\\ \\ \\_/ \\_/ \\ \\ \\ \\ \\//\\  __/\s
+                          \\ \\_\\   \\ \\__\\\\ \\ ,__/\\/______/\\ \\___x___/'\\ \\_\\ \\_\\\\ \\____\\
+                           \\/_/    \\/__/ \\ \\ \\/           \\/__//__/   \\/_/\\/_/ \\/____/
+                                          \\ \\_\\                                      \s
+                                           \\/_/                                      \s
+                        
+                        """;
 
-        try{
-            while(running) {
+        terminal.writer().write(banner);
+        terminal.flush();
 
 
-                if(client.isConnected()) {
+        while(running) {
+
+
+            if(client.isConnected()) {
+                terminal.writer().println("==================================================");
+                terminal.writer().println("                  (ONLINE MODE)                   ");
+                terminal.writer().println("==================================================");
+                terminal.writer().flush();
+
+                while(client.isConnected()) {
                     // write command
                     Command command = writeCommand();
 
                     // send command to server
-                    sendCommand(command);
-                } else {
-                    terminal.writer().println("-- Disconnected mod --");
-                    terminal.writer().println("-- press any key to exit --");
-                    terminal.writer().flush();
-                    reader.readLine();
-                    running = false;
-
-                    //TODO: handle a local command
-                    // local commands are commands used to configure user aspects like username, remote host, port, etc...
+                    try {
+                        sendCommand(command);
+                    } catch (IOException e) {
+                        terminal.writer().println("Failed to send command to remote!");
+                        terminal.writer().flush();
+                    }
                 }
+            } else {
+
+
+                terminal.writer().println("==================================================");
+                terminal.writer().println("                  (OFFLINE MODE)                  ");
+                terminal.writer().println("==================================================");
+                terminal.writer().flush();
+
+                //TODO: handle a local command
+                new OfflineClientCLI(terminal, client).start();
 
             }
 
-
-
-        } catch (Exception e) {
-            //TODO: add logs here
-
         }
+
 
     }
 

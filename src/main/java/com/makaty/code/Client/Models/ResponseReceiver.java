@@ -6,31 +6,44 @@ import com.makaty.code.Common.Types.PacketType;
 import com.makaty.code.Common.Exceptions.RemoteDisconnectionException;
 
 import java.rmi.ConnectIOException;
-
-
 public class ResponseReceiver extends Thread {
 
-    private boolean running;
-
-    public ResponseReceiver() {running = false;}
+    private volatile boolean running = false;
 
     public void run() {
         running = true;
         try {
-            while(running) {
-                ReplyPacket replyPacket = (ReplyPacket) PacketType.REPLY.getReader().read(ConnectionManager.getInstance().getCommandSocketChannel());
-                replyPacket.getReply().getReplyType().getReplyHandler().handle(replyPacket.getReply());
+            while (running && !Thread.currentThread().isInterrupted()) {
+                try {
+                    ReplyPacket replyPacket = (ReplyPacket) PacketType.REPLY
+                            .getReader()
+                            .read(ConnectionManager.getInstance().getCommandSocketChannel());
+
+                    replyPacket.getReply().getReplyType().getReplyHandler().handle(replyPacket.getReply());
+
+                } catch (RemoteDisconnectionException e) {
+                    terminate(); // close the connection
+                }
             }
-        } catch (RemoteDisconnectionException e) {
+        } catch (Exception e) {
+            LoggerManager.getInstance().error("ResponseReceiver crashed: " + e.getMessage());
+        } finally {
+            // cleanup
             try {
-                LoggerManager.getInstance().warn("Remote server disconnected.\n");
-                terminate();
-            } catch (ConnectIOException ignored) {}
+                ConnectionManager.getInstance().terminateConnection();
+            } catch (Exception ignored) {}
         }
     }
 
-    public void terminate() throws ConnectIOException {
+    public void terminate() {
         running = false;
-        if(ConnectionManager.getInstance().isConnected()) ConnectionManager.getInstance().terminateConnection();
+        this.interrupt(); // wake thread if stuck in blocking call
+        try {
+            if (ConnectionManager.getInstance().isConnected()) {
+                ConnectionManager.getInstance().terminateConnection();
+            }
+        } catch (ConnectIOException e) {
+            LoggerManager.getInstance().warn("Error closing connection: " + e.getMessage());
+        }
     }
 }
