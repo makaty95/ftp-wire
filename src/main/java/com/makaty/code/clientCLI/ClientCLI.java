@@ -92,23 +92,51 @@ public class ClientCLI {
     public void fire() {
 
         running = true;
+        String banner = """
+
+                           ___  __                                                   \s
+                         /'___\\/\\ \\__                               __               \s
+                        /\\ \\__/\\ \\ ,_\\  _____            __  __  __/\\_\\  _ __    __  \s
+                        \\ \\ ,__\\\\ \\ \\/ /\\ '__`\\  _______/\\ \\/\\ \\/\\ \\/\\ \\/\\`'__\\/'__`\\\s
+                         \\ \\ \\_/ \\ \\ \\_\\ \\ \\L\\ \\/\\______\\ \\ \\_/ \\_/ \\ \\ \\ \\ \\//\\  __/\s
+                          \\ \\_\\   \\ \\__\\\\ \\ ,__/\\/______/\\ \\___x___/'\\ \\_\\ \\_\\\\ \\____\\
+                           \\/_/    \\/__/ \\ \\ \\/           \\/__//__/   \\/_/\\/_/ \\/____/
+                                          \\ \\_\\                                      \s
+                                           \\/_/                                      \s
+                        
+                        """;
+
+        terminal.writer().write(banner);
+        terminal.flush();
+
 
         while(running) {
 
 
             if(client.isConnected()) {
-                // write command
-                Command command = writeCommand();
+                terminal.writer().println("==================================================");
+                terminal.writer().println("                  (ONLINE MODE)                   ");
+                terminal.writer().println("==================================================");
+                terminal.writer().flush();
 
-                // send command to server
-                try {
-                    sendCommand(command);
-                } catch (IOException e) {
-                    terminal.writer().println("Failed to send command to remote!");
-                    terminal.writer().flush();
+                while(client.isConnected()) {
+                    // write command
+                    Command command = writeCommand();
+
+                    // send command to server
+                    try {
+                        sendCommand(command);
+                    } catch (IOException e) {
+                        terminal.writer().println("Failed to send command to remote!");
+                        terminal.writer().flush();
+                    }
                 }
             } else {
-                terminal.writer().println("-- Offline mode --");
+
+
+                terminal.writer().println("==================================================");
+                terminal.writer().println("                  (OFFLINE MODE)                  ");
+                terminal.writer().println("==================================================");
                 terminal.writer().flush();
 
                 //TODO: handle a local command

@@ -41,12 +41,6 @@ public class ConnectionManager {
         localDataAddress = new InetSocketAddress(ClientConfig.LOCAL_HOST, 0);
         remoteCommandAddress = new InetSocketAddress(ClientConfig.REMOTE_HOST, ClientConfig.REMOTE_PORT);
 
-//        if(remoteCommandAddress == null) {
-//            throw new IOException("No remote specified.\n");
-//        }
-
-        LoggerManager.getInstance().info("Opened client host: " + localCommandAddress.getAddress());
-
         try {
 
             // [1] Connect to command socket
