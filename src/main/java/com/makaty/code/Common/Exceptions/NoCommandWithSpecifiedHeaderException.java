@@ -1,4 +1,4 @@
-package com.makaty.code.Server.Exceptions;
+package com.makaty.code.Common.Exceptions;
 
 public class NoCommandWithSpecifiedHeaderException extends Exception {
     public NoCommandWithSpecifiedHeaderException(String message) {

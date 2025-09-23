@@ -43,8 +43,8 @@
 | `QUIT`  | `No parameters`          | Terminates the client connection                                                                                          | ✅ |
 | `RETR`  | `file_path` `file_name`  | Retrieves a file from the server. Optionally rename it by providing `file_name`.                                          | ✅ |
 | `STOR`  | `file_path` `file_name`  | Uploads a file to the server. Optionally rename it by providing `file_name`.                                              | ⬜ |
-| `PWD`   | `No parameters`          | Displays the current working directory                                                                                    | ⬜ |
-| `CWD`   | `directory_path`         | Changes the current working directory                                                                                     | ⬜ |
+| `PWD`   | `No parameters`          | Displays the current working directory                                                                                    | ✅ |
+| `CWD`   | `directory_path`         | Changes the current working directory                                                                                     | ✅ |
 
 ✅ = Implemented & tested  
 ⬜ = Planned

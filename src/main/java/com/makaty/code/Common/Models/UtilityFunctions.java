@@ -1,4 +1,4 @@
-package com.makaty.code.Common;
+package com.makaty.code.Common.Models;
 
 import java.util.ArrayList;
 import java.util.List;

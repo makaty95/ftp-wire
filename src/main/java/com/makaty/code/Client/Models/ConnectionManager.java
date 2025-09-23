@@ -17,9 +17,11 @@ public class ConnectionManager {
     private InetSocketAddress remoteCommandAddress, remoteDataAddress;
     private InetSocketAddress localCommandAddress, localDataAddress;
     private String sessionId;
+    private String workingDir;
     private static ConnectionManager instance;
 
     private ConnectionManager() {
+        workingDir = "\\";
     }
 
     public static ConnectionManager getInstance() {
@@ -116,5 +118,13 @@ public class ConnectionManager {
 
     public SocketChannel getDataSocketChannel() {
         return dataSocketChannel;
+    }
+
+    public String getWorkingDir() {
+        return workingDir;
+    }
+
+    public void setWorkingDir(String dir) {
+        workingDir = dir;
     }
 }

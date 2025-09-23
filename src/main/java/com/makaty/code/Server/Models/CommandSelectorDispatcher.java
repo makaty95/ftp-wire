@@ -4,7 +4,7 @@ import com.makaty.code.Server.Handlers.CommandErrorHandler;
 import com.makaty.code.Server.Handshaking.Session;
 import com.makaty.code.Server.Handlers.CommandHandler;
 import com.makaty.code.Common.Packets.Communication.CommandPacket;
-import com.makaty.code.Server.Exceptions.NoCommandWithSpecifiedHeaderException;
+import com.makaty.code.Common.Exceptions.NoCommandWithSpecifiedHeaderException;
 import com.makaty.code.Common.Exceptions.RemoteDisconnectionException;
 import com.makaty.code.Common.Models.Command;
 import com.makaty.code.Server.Models.Types.CommandType;

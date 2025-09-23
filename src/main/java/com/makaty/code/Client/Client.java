@@ -79,6 +79,10 @@ public class Client {
 
     public int getLocalPort() {return ClientConfig.LOCAL_PORT;}
 
+    public String getWorkingDir() {
+        return ConnectionManager.getInstance().getWorkingDir();
+    }
+
 
     // Server interaction
     public void sendCommand(Command command) {

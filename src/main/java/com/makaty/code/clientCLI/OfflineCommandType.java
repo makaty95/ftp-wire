@@ -2,11 +2,10 @@ package com.makaty.code.clientCLI;
 
 import com.makaty.code.Common.Exceptions.CommandFormatException;
 import com.makaty.code.Common.Models.Command;
-import com.makaty.code.Common.UtilityFunctions;
-import com.makaty.code.Server.Exceptions.NoCommandWithSpecifiedHeaderException;
+import com.makaty.code.Common.Models.UtilityFunctions;
+import com.makaty.code.Common.Exceptions.NoCommandWithSpecifiedHeaderException;
 import org.jline.utils.InfoCmp;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public enum OfflineCommandType {

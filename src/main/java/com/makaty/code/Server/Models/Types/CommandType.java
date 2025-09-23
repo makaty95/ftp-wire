@@ -1,12 +1,8 @@
 package com.makaty.code.Server.Models.Types;
 
-import com.makaty.code.Common.Exceptions.CommandFormatException;
-import com.makaty.code.Common.UtilityFunctions;
-import com.makaty.code.Server.Handlers.CommandHandler;
-import com.makaty.code.Server.Handlers.HelpCommandHandler;
-import com.makaty.code.Server.Handlers.QuitCommandHandler;
-import com.makaty.code.Server.Handlers.RetrieveFileCommandHandler;
-import com.makaty.code.Server.Exceptions.NoCommandWithSpecifiedHeaderException;
+import com.makaty.code.Common.Models.UtilityFunctions;
+import com.makaty.code.Server.Handlers.*;
+import com.makaty.code.Common.Exceptions.NoCommandWithSpecifiedHeaderException;
 import com.makaty.code.Common.Models.Command;
 
 import java.util.List;
@@ -31,7 +27,20 @@ public enum CommandType {
             "quit the ftp serving process", // description
             new String[]{}, // mandatory
             new String[]{} // optional
+    ),
+    CWD(ChangeWorkingDirectoryHandler::new,
+            "cwd", // header
+            "change working directory", // description
+            new String[]{"directory_name"}, // mandatory
+            new String[]{} // optional
+    ),
+    PWD(PrintWorkingDirectory::new,
+            "pwd", // header
+            "get info about the current working directory", // description
+            new String[]{}, // mandatory
+            new String[]{} // optional
     );
+
 
     private final Supplier<CommandHandler> commandHandlerSupplier;
     private final String header;

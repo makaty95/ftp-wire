@@ -1,7 +1,7 @@
 package com.makaty.Server;
 
 import com.makaty.code.Common.Models.Command;
-import com.makaty.code.Server.Exceptions.NoCommandWithSpecifiedHeaderException;
+import com.makaty.code.Common.Exceptions.NoCommandWithSpecifiedHeaderException;
 import com.makaty.code.Server.Models.Types.CommandType;
 import org.junit.jupiter.api.Test;
 

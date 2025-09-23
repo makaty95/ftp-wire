@@ -3,7 +3,7 @@ package com.makaty.code.clientCLI;
 import com.makaty.code.Client.Client;
 import com.makaty.code.Common.Exceptions.CommandFormatException;
 import com.makaty.code.Common.Models.Command;
-import com.makaty.code.Server.Exceptions.NoCommandWithSpecifiedHeaderException;
+import com.makaty.code.Common.Exceptions.NoCommandWithSpecifiedHeaderException;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
 import org.jline.terminal.Terminal;

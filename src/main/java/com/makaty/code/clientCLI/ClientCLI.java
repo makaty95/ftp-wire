@@ -40,7 +40,7 @@ public class ClientCLI {
         String userName = client.getUserName();
         do {
 
-            terminal.writer().printf("\r(%s)> ", userName);
+            terminal.writer().printf("\r(%s@%s)> ", userName, client.getWorkingDir());
             terminal.writer().flush();
 
             in = reader.readLine();
