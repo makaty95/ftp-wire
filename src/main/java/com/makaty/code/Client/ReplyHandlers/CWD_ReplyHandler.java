@@ -1,7 +1,6 @@
 package com.makaty.code.Client.ReplyHandlers;
 
 import com.makaty.code.Client.Models.ConnectionManager;
-import com.makaty.code.Client.Models.LoggerManager;
 import com.makaty.code.Client.Models.Reply;
 
 public class CWD_ReplyHandler implements ReplyHandler {

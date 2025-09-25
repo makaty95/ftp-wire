@@ -11,7 +11,7 @@ import com.makaty.code.Server.Tasks.SendPacketTask;
 
 import java.io.IOException;
 
-public class PrintWorkingDirectory implements CommandHandler {
+public class PrintWorkingDirectoryHandler implements CommandHandler {
 
     @Override
     public Void handle(Command command, Session clientSession) throws IOException {

@@ -15,3 +15,11 @@ CLIENT FEATURES:
 
 SERVER OPTIMIZATIONS:
 1) delete the CommandRegistry and integrate the content inside the CommandType enum
+2) A client should have a FileManager instead of keeping that functionality in the ClientProfile Class,
+it should be a separate class.
+3) check this bug:
+
+(Makaty@\..\Spring_Book)> nlist
+chapter 10\
+(Makaty@\..\Spring_Book)> cwd chapter 10
+Invalid command args count or type.

@@ -24,7 +24,7 @@ public class ClientCLI {
         reader = LineReaderBuilder.builder().terminal(terminal).build();
 
         client = new Client();
-        client.addLogger(new ClientCLILogger(terminal));
+        client.addLogger(new ClientCLILogger(reader));
 
         System.out.println("Terminal type: " + terminal.getType());
     }
@@ -37,16 +37,12 @@ public class ClientCLI {
 
     private Command writeCommand() {
         String in;
-        String userName = client.getUserName();
+
         do {
-
-            terminal.writer().printf("\r(%s@%s)> ", userName, client.getWorkingDir());
-            terminal.writer().flush();
-
-            in = reader.readLine();
-
-
-        }while(in.isBlank() && client.isConnected());
+            String userName = client.getUserName();
+            String prompt = String.format("(%s@%s)> ", userName, client.getWorkingDir());
+            in = reader.readLine(prompt); // JLine handles the prompt
+        } while (in.isBlank() && client.isConnected());
 
 
 

@@ -1,6 +1,8 @@
 package com.makaty.code.Server.Handlers;
 
 
+import com.makaty.code.Common.Models.Status;
+import com.makaty.code.Common.Models.UtilityFunctions;
 import com.makaty.code.Common.Types.ReplyType;
 import com.makaty.code.Common.Models.Command;
 import com.makaty.code.Common.Packets.Communication.ReplyPacket;
@@ -43,8 +45,12 @@ public class RetrieveFileCommandHandler implements CommandHandler {
             return null;
         }
 
-        String filePath = command.getParam(0);
-        File file = new File(filePath);
+        // Getting the file from the current path which the client is in
+        String fileName = command.getParam(0);
+        File currentFile = clientSession.getClientProfile().getCurrentDir();
+        File file = new File(currentFile, fileName);
+
+
         String newFileName = command.getParamsCount() == 2 ? command.getParam(1) : file.getName();
 
         if(!file.exists()) {
@@ -53,6 +59,15 @@ public class RetrieveFileCommandHandler implements CommandHandler {
             /// 2) schedule a proper message to the client
             TaskDispatcher.getInstance().submitAsyncTask(() ->
                     new CommandErrorHandler().handle(ErrorType.INVALID_PATH, clientSession)
+            );
+            return null;
+        }
+
+        /// SECURITY CHECK
+        Status state = UtilityFunctions.checkFileAuthorization(file, clientSession.getClientProfile());
+        if(state == Status.UNAUTHORIZED_ACCESS) {
+            TaskDispatcher.getInstance().submitAsyncTask(() ->
+                    new CommandErrorHandler().handle(ErrorType.UNAUTHORIZED, clientSession)
             );
             return null;
         }

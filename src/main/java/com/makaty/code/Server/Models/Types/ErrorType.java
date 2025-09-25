@@ -7,7 +7,7 @@ public enum ErrorType {
     WRONG_FILE_NAME("Specified directory doesn't exist.", "Specified directory doesn't exist."),
     FILE_NOT_DIR("Specified path is not a valid directory", "Specified path does not refer to a directory."),
 
-    UNAUTHORIZED("Unauthorized request.", "You are not allowed to perform this action."),
+    UNAUTHORIZED("Unauthorized request.", "You are unauthorized to perform this action."),
     INTERNAL_ERROR("Internal server error.", "An unexpected error occurred on the server.");
 
     private final String logMessage;

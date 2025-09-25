@@ -37,14 +37,15 @@
 
 ## 📜 Supported Commands
 
-| Command | Parameters               | Description                                                                                                               | Status |
-|:--------|:-------------------------|:--------------------------------------------------------------------------------------------------------------------------|:------:|
-| `HELP`  | `No parameters`          | Lists all supported commands                                                                                              | ✅ |
-| `QUIT`  | `No parameters`          | Terminates the client connection                                                                                          | ✅ |
-| `RETR`  | `file_path` `file_name`  | Retrieves a file from the server. Optionally rename it by providing `file_name`.                                          | ✅ |
-| `STOR`  | `file_path` `file_name`  | Uploads a file to the server. Optionally rename it by providing `file_name`.                                              | ⬜ |
-| `PWD`   | `No parameters`          | Displays the current working directory                                                                                    | ✅ |
-| `CWD`   | `directory_path`         | Changes the current working directory                                                                                     | ✅ |
+| Command | Parameters               | Description                                                                      | Status |
+|:--------|:-------------------------|:---------------------------------------------------------------------------------|:------:|
+| `HELP`  | `No parameters`          | Lists all supported commands.                                                    | ✅ |
+| `QUIT`  | `No parameters`          | Terminates the client connection.                                                | ✅ |
+| `RETR`  | `file_path` `file_name`  | Retrieves a file from the server. Optionally rename it by providing `file_name`. | ✅ |
+| `PWD`   | `No parameters`          | Displays the current working directory.                                          | ✅ |
+| `CWD`   | `directory_path`         | Changes the current working directory.                                           | ✅ |
+| `NLIST` | `directory_path`         | List all files and folders inside a directory.                                   | ✅ |
+| `STOR`  | `file_path` `file_name`  | Uploads a file to the server. Optionally rename it by providing `file_name`.     | ⬜ |
 
 ✅ = Implemented & tested  
 ⬜ = Planned
@@ -186,3 +187,8 @@
     └── Server_CLI.java
 
 ```
+---
+## Resources used
+- https://www.rfc-editor.org/rfc/rfc959
+- https://www.hostitsmart.com/manage/knowledgebase/392/What-is-the-Difference-Between-HTTP-and-FTP.html
+- http://www.nsftools.com/tips/RawFTP.htm

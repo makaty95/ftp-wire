@@ -34,11 +34,17 @@ public enum CommandType {
             new String[]{"directory_name"}, // mandatory
             new String[]{} // optional
     ),
-    PWD(PrintWorkingDirectory::new,
+    PWD(PrintWorkingDirectoryHandler::new,
             "pwd", // header
             "get info about the current working directory", // description
             new String[]{}, // mandatory
             new String[]{} // optional
+    ),
+    NLIST(ListFilesCommandHandler::new,
+            "nlist", // header
+            "list all files and folders inside a directory", // description
+            new String[]{}, // mandatory
+            new String[]{"directory_name"} // optional
     );
 
 
@@ -95,7 +101,7 @@ public enum CommandType {
 
     private static String buildCommandsInfo() {
         StringBuilder sb = new StringBuilder();
-        sb.append("\n----------------------------------------------------------------------------------------------------\n");
+        sb.append("----------------------------------------------------------------------------------------------------\n");
         sb.append(String.format("| %-20s | %-30s | %-40s |\n", "Command", "Parameters", "Description"));
         sb.append("----------------------------------------------------------------------------------------------------\n");
 
