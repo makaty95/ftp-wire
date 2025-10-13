@@ -1,0 +1,92 @@
+site_name: FTP-WIRE 
+site_description: A multi-client FTP server and client system written in Java
+site_author: Mohamed Makaty
+repo_url: https://github.com/makaty95/ftp-wire
+repo_name: makaty95/ftp-wire
+extra_css:
+  - css/custom.css
+plugins:
+  - search
+theme:
+  name: material
+  logo: images/logo.png
+  favicon: images/favicon.ico
+  features:
+    - navigation.footer
+    - navigation.expand
+    - navigation.instant
+    - navigation.top
+    - content.code.copy
+    - search.suggest
+    - search.highlight
+  palette:
+    # Dark Mode
+    - scheme: slate
+      primary: black 
+      accent: green
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+    # Light Mode
+    - scheme: default
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+      primary: black
+      accent: deep orange
+
+markdown_extensions:
+  - md_in_html
+  - pymdownx.blocks.caption
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+  - toc:
+      permalink: true
+  - admonition
+  - pymdownx.tabbed:
+      alternate_style: true
+      combine_header_slug: true
+  - pymdownx.highlight
+  - footnotes
+  - def_list
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.emoji
+  - pymdownx.tasklist
+
+
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - Usage: usage.md
+  - Architecture: 
+    - Overview: architecture-overview.md
+    - Client: client-architecture.md
+    - Server: server-architecture.md
+  - Contributing: contributing.md
+  - FAQ: faq.md
+
+
+extra:
+  social:
+    - icon: simple/github
+      link: https://github.com/makaty95/
+
+copyright: Copyright &copy; 2025 Mohamed Makaty

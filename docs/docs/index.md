@@ -8,7 +8,7 @@
 
 </p>
 
-![ftp-wire-logo](docs/docs/images/ftp-wire-logo.png)
+![ftp-wire-logo](images/ftp-wire-logo.png)
 
 A **multi-client FTP system** built in Java, supporting **file transfers, authentication, and command-based communication** between clients and a central server.
 
@@ -24,10 +24,6 @@ Many aspects where taken into consideration while designing such software archit
   packet contents.
 
 The current project version had been refactored about 2 times before reaching this stage of the developement.
-Check the full docs
-
-## Documentation
-Find the full docs in the `/docs` folder inside the repo.
 
 ## License
 The project uses the <a href="https://en.wikipedia.org/wiki/MIT_License" target="_blank"> MIT license </a>.
@@ -47,18 +43,24 @@ The project uses the <a href="https://en.wikipedia.org/wiki/MIT_License" target=
 
 ---
 
-
 ## Supported Commands
 
-| Command | Parameters              | Description                                                                      | Status |
-| :------ | :---------------------- | :------------------------------------------------------------------------------- |:------:|
-| `HELP`  | `No parameters`         | Lists all supported commands.                                                    |   ✅    |
-| `QUIT`  | `No parameters`         | Terminates the client connection.                                                |   ✅    |
-| `RETR`  | `file_path` `file_name` | Retrieves a file from the server. Optionally rename it by providing `file_name`. |   ✅    |
-| `PWD`   | `No parameters`         | Displays the current working directory.                                          |   ✅    |
-| `CWD`   | `directory_path`        | Changes the current working directory.                                           |   ✅    |
-| `NLIST` | `directory_path`        | List all files and folders inside a directory.                                   |   ✅    |
-| `STOR`  | `file_path` `file_name` | Uploads a file to the server. Optionally rename it by providing `file_name`.     |   ⬜    |
+| Command | Parameters              | Description                                                                      |                  Status                   |
+| :------ | :---------------------- | :------------------------------------------------------------------------------- | :---------------------------------------: |
+| `HELP`  | `No parameters`         | Lists all supported commands.                                                    | :material-checkbox-marked-circle-outline: |
+| `QUIT`  | `No parameters`         | Terminates the client connection.                                                | :material-checkbox-marked-circle-outline: |
+| `RETR`  | `file_path` `file_name` | Retrieves a file from the server. Optionally rename it by providing `file_name`. | :material-checkbox-marked-circle-outline: |
+| `PWD`   | `No parameters`         | Displays the current working directory.                                          | :material-checkbox-marked-circle-outline: |
+| `CWD`   | `directory_path`        | Changes the current working directory.                                           | :material-checkbox-marked-circle-outline: |
+| `NLIST` | `directory_path`        | List all files and folders inside a directory.                                   | :material-checkbox-marked-circle-outline: |
+| `STOR`  | `file_path` `file_name` | Uploads a file to the server. Optionally rename it by providing `file_name`.     |         :material-progress-clock:         |
+
+!!! wire-note "Status indication"
+
+    :material-checkbox-marked-circle-outline: :material-arrow-right-bold: Implemented & tested
+
+    :material-progress-clock: :material-arrow-right-bold: Planned
+---
 
 
 ## Project Core Modules
@@ -68,11 +70,18 @@ The project uses the <a href="https://en.wikipedia.org/wiki/MIT_License" target=
 | `Server` | Core server logic, client management, and file handling     |
 | `Client` | An FTP client which is used to connect and transfer files   |
 
+See the full Project Structure [here](architecture-overview/#project-structure)
+
+---
 
 ## Contributing
+
 Everyone is welcomed to contribute to **FTP-WIRE** project. Contribution can be techinical such as recommending or implementing a new feature, bugs fixing/discovery, or non-technical such as docs writing and fixing.
 
-## Resources used
-- https://www.rfc-editor.org/rfc/rfc959
-- https://www.hostitsmart.com/manage/knowledgebase/392/What-is-the-Difference-Between-HTTP-and-FTP.html
-- http://www.nsftools.com/tips/RawFTP.htm
+Kindly find the full contribution guide [here](contributing.md)
+
+## Quick Links
+
+- [Getting Started](getting-started.md)
+- [Architecture Overview](architecture-overview.md)
+- [Usage Guide](usage.md)
