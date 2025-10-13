@@ -27,7 +27,8 @@ The current project version had been refactored about 2 times before reaching th
 Check the full docs
 
 ## Documentation
-Find the full docs in the `/docs` folder inside the repo.
+Find the docs files in the `/docs` folder inside the repo.
+Also, take a look at the <a href="https://makaty95.github.io/ftp-wire/" target="_blank">complete documentation</a> 
 
 ## License
 The project uses the <a href="https://en.wikipedia.org/wiki/MIT_License" target="_blank"> MIT license </a>.
