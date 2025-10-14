@@ -1,10 +1,18 @@
 <p align="center">
   <img src='https://img.shields.io/badge/Java-8%2B-blue?logo=java&logoColor=white' />
   <img src='https://img.shields.io/badge/build-passing-brightgreen' />
-  <img src='https://img.shields.io/badge/license-MIT-yellow' />
-  <img src='https://img.shields.io/github/issues/makaty95/ftp-server' /> <br>
+  <a href="https://github.com/makaty95/ftp-wire/blob/master/LICENSE">
+    <img src="https://img.shields.io/badge/license-MIT-yellow" />
+  </a>
+  <a href="https://github.com/makaty95/ftp-wire/issues">
+    <img src="https://img.shields.io/github/issues/makaty95/ftp-wire" />
+  </a>
+  <br>
+  <a href="https://github.com/makaty95/ftp-wire/forks">
+    <img src="https://img.shields.io/github/forks/makaty95/ftp-server?style=social" />
+  </a>
   <img src='https://img.shields.io/github/stars/makaty95/ftp-server?style=social' />
-  <img src='https://img.shields.io/github/forks/makaty95/ftp-server?style=social' />
+
 
 </p>
 
