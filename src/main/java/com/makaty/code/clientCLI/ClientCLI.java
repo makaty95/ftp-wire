@@ -44,8 +44,6 @@ public class ClientCLI {
             in = reader.readLine(prompt); // JLine handles the prompt
         } while (in.isBlank() && client.isConnected());
 
-
-
         String[] splits = in.split(" ");
         Command ret = new Command(splits[0]);
         for(int i = 1; i<splits.length; i++) ret.addParam(splits[i]);

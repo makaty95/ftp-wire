@@ -18,12 +18,12 @@ public class CommandErrorHandler implements ErrorHandler {
      * @param session   The session of the client to send the response to.
      */
     @Override
-    public Void handle(ErrorType errorType, Session session) {
+    public Void handle(ErrorType errorType, Session session,String commandId) {
         // Log the error internally
         Server.serverLogger.warn(errorType.getLogMessage());
 
         // Create a proper message packet for the client
-        ReplyPacket replyPacket = ReplyType.MESSAGE.createPacket(errorType.getClientMessage());
+        ReplyPacket replyPacket = ReplyType.MESSAGE.createPacket(commandId,errorType.getClientMessage());
 
         // Send the packet asynchronously to the client
         TaskDispatcher.getInstance().submitAsyncTask(() ->

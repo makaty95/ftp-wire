@@ -19,7 +19,7 @@ public class ChangeWorkingDirectoryHandler implements CommandHandler {
         // 0) validate it is in a valid shape
         if(!CommandType.CWD.isValidSignature(command)) {
             TaskDispatcher.getInstance().submitAsyncTask(() ->
-                    new CommandErrorHandler().handle(ErrorType.INVALID_COMMAND_PARAMS, clientSession)
+                    new CommandErrorHandler().handle(ErrorType.INVALID_COMMAND_PARAMS, clientSession,command.getCommandId())
             );
             return null;
         }
@@ -31,28 +31,28 @@ public class ChangeWorkingDirectoryHandler implements CommandHandler {
         /// SECURITY CHECK
         if(status == Status.UNAUTHORIZED_ACCESS) {
             TaskDispatcher.getInstance().submitAsyncTask(() ->
-                    new CommandErrorHandler().handle(ErrorType.UNAUTHORIZED, clientSession)
+                    new CommandErrorHandler().handle(ErrorType.UNAUTHORIZED, clientSession,command.getCommandId())
             );
             return null;
         }
 
         if(status == Status.FILE_NOT_DIR) {
             TaskDispatcher.getInstance().submitAsyncTask(() ->
-                    new CommandErrorHandler().handle(ErrorType.FILE_NOT_DIR, clientSession)
+                    new CommandErrorHandler().handle(ErrorType.FILE_NOT_DIR, clientSession,command.getCommandId())
             );
             return null;
         }
 
         if(status == Status.NO_FILE_EXISTS) {
             TaskDispatcher.getInstance().submitAsyncTask(() ->
-                    new CommandErrorHandler().handle(ErrorType.WRONG_FILE_NAME, clientSession)
+                    new CommandErrorHandler().handle(ErrorType.WRONG_FILE_NAME, clientSession,command.getCommandId())
             );
             return null;
         }
 
 
         // 2) send new relative path to the client
-        ReplyPacket replyPacket = ReplyType.CWD_INFO.createPacket(
+        ReplyPacket replyPacket = ReplyType.CWD_INFO.createPacket(command.getCommandId(),
                 clientSession.getClientProfile().getRelativeWorkingDir(),
                 clientSession.getClientProfile().getAbsoluteWorkingDir()
         );

@@ -1,6 +1,7 @@
 package com.makaty.code.Client.Models;
 
-
+import com.makaty.code.Client.Controllers.CommandController;
+import com.makaty.code.Common.Models.Command;
 import com.makaty.code.Common.Packets.Communication.ReplyPacket;
 import com.makaty.code.Common.Types.PacketType;
 import com.makaty.code.Common.Exceptions.RemoteDisconnectionException;
@@ -9,6 +10,7 @@ import java.rmi.ConnectIOException;
 public class ResponseReceiver extends Thread {
 
     private volatile boolean running = false;
+
 
     public void run() {
         running = true;
@@ -20,7 +22,15 @@ public class ResponseReceiver extends Thread {
                             .read(ConnectionManager.getInstance().getCommandSocketChannel());
 
                     replyPacket.getReply().getReplyType().getReplyHandler().handle(replyPacket.getReply());
-
+                    String commandId = replyPacket.getReply().getCommandId();
+                    if(commandId !=null){
+                        Command command= CommandController.getInstance().getPendingCommands().get(commandId);
+                        if(command!=null){
+                            CommandController.getInstance().signalResponseReceived(command);
+                        }else{
+                            LoggerManager.getInstance().warn("Command with the following Id not found : "+commandId);
+                        }
+                    }
                 } catch (RemoteDisconnectionException e) {
                     terminate(); // close the connection
                 }

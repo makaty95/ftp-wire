@@ -6,5 +6,5 @@ import com.makaty.code.Server.Models.Types.ErrorType;
 
 @FunctionalInterface
 public interface ErrorHandler {
-    Void handle(ErrorType errorType, Session session);
+    Void handle(ErrorType errorType, Session session,String commandId);
 }

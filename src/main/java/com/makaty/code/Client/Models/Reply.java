@@ -8,13 +8,19 @@ public class Reply {
     private ReplyType replyType;
     private List<Long> longs;
     private List<String> strings;
+    private String commandId;
+
+    public String getCommandId() {
+        return commandId;
+    }
 
     //TODO: (optimization) add int list also to handle all types of data being transferred
 
-    public Reply(ReplyType replyType, List<Long> longs, List<String> strings) {
+    public Reply(ReplyType replyType, List<Long> longs, List<String> strings,String commandId) {
         this.longs = longs;
         this.strings = strings;
         this.replyType = replyType;
+        this.commandId = commandId;
     }
 
     public ReplyType getReplyType() {

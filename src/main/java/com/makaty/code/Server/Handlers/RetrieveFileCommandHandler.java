@@ -40,7 +40,7 @@ public class RetrieveFileCommandHandler implements CommandHandler {
             /// 1) log some logs with the logger
             /// 2) schedule a proper message to the client
             TaskDispatcher.getInstance().submitAsyncTask(() ->
-                    new CommandErrorHandler().handle(ErrorType.INVALID_COMMAND_PARAMS, clientSession)
+                    new CommandErrorHandler().handle(ErrorType.INVALID_COMMAND_PARAMS, clientSession,command.getCommandId())
             );
             return null;
         }
@@ -58,7 +58,7 @@ public class RetrieveFileCommandHandler implements CommandHandler {
             /// 1) log some logs with the logger
             /// 2) schedule a proper message to the client
             TaskDispatcher.getInstance().submitAsyncTask(() ->
-                    new CommandErrorHandler().handle(ErrorType.INVALID_PATH, clientSession)
+                    new CommandErrorHandler().handle(ErrorType.INVALID_PATH, clientSession,command.getCommandId())
             );
             return null;
         }
@@ -67,13 +67,13 @@ public class RetrieveFileCommandHandler implements CommandHandler {
         Status state = UtilityFunctions.checkFileAuthorization(file, clientSession.getClientProfile());
         if(state == Status.UNAUTHORIZED_ACCESS) {
             TaskDispatcher.getInstance().submitAsyncTask(() ->
-                    new CommandErrorHandler().handle(ErrorType.UNAUTHORIZED, clientSession)
+                    new CommandErrorHandler().handle(ErrorType.UNAUTHORIZED, clientSession,command.getCommandId())
             );
             return null;
         }
 
         // Send FileInfo packet to the client first (Synchronously)
-        ReplyPacket replyPacket = ReplyType.FILE_INFO.createPacket(newFileName, file.length());
+        ReplyPacket replyPacket = ReplyType.FILE_INFO.createPacket(command.getCommandId(),newFileName, file.length());
         SendPacketTask packetTask = new SendPacketTask(clientSession.getClientProfile(), replyPacket);
         TaskDispatcher.getInstance().submitSyncTask(packetTask); //TODO: (optimization) could we convert this to asynchronous task ?
 

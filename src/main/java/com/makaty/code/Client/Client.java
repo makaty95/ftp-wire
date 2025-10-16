@@ -83,7 +83,6 @@ public class Client {
         return ConnectionManager.getInstance().getWorkingDir();
     }
 
-
     // Server interaction
     public void sendCommand(Command command) {
         CommandController.getInstance().sendCommand(command);

@@ -3,8 +3,10 @@ package com.makaty.code.Server.Models;
 import com.makaty.code.Server.Server;
 import com.makaty.code.Server.Tasks.Task;
 
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionException;
 
 /*
  * Tasks to be made by the server:
@@ -24,7 +26,17 @@ public class ThreadPool {
     public <T> T ExecuteSync(Task<T> task) {
         try {
             return pool.submit(task).get();
-        } catch(Exception e) {
+        } catch (RejectedExecutionException e) {
+            Server.serverLogger.error("Thread pool rejected task: " + task);
+            return null;
+        } catch (InterruptedException e) {
+            Server.serverLogger.error("Thread pool interrupted, message: " + e.getMessage());
+            Thread.currentThread().interrupt();
+            return null;
+        } catch (ExecutionException e) {
+            Server.serverLogger.error("Thread pool execution error, cause: " + e.getCause());
+            return null;
+        } catch (Exception e) {
 
             Server.serverLogger.error("Some Sync. task could not be scheduled in the Thread pool!");
             return null;

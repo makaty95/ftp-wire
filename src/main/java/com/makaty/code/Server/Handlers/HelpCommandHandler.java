@@ -29,13 +29,13 @@ public class HelpCommandHandler implements CommandHandler {
         // 1) validate it is in a valid shape
         if(!CommandType.HELP.isValidSignature(command)) {
             TaskDispatcher.getInstance().submitAsyncTask(() ->
-                    new CommandErrorHandler().handle(ErrorType.INVALID_COMMAND_PARAMS, clientSession)
+                    new CommandErrorHandler().handle(ErrorType.INVALID_COMMAND_PARAMS, clientSession,command.getCommandId())
             );
             return null;
         }
 
         // creating response packet which have the descriptions to the commands
-        ReplyPacket replyPacket = ReplyType.MESSAGE.createPacket(CommandType.COMMANDS_INFO);
+        ReplyPacket replyPacket = ReplyType.MESSAGE.createPacket(command.getCommandId(), CommandType.COMMANDS_INFO);
 
         // submitting task to the dispatcher
         TaskDispatcher.getInstance().submitAsyncTask(new SendPacketTask(clientSession.getClientProfile(), replyPacket));
