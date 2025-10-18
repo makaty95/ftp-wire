@@ -100,8 +100,7 @@ public class DataController {
         SocketChannel dataSocket = ConnectionManager.getInstance().getDataSocketChannel();
         long loadedBytes = 0L;
 
-        int lastPct = -1;
-        boolean progressStarted = false;
+
 
         try(FileOutputStream fos = new FileOutputStream(URI)) {
             ByteBuffer buffer = ByteBuffer.allocate(CHUNK);
@@ -120,29 +119,13 @@ public class DataController {
                 fos.write(buffer.array(), 0, bytesRead);
                 loadedBytes += bytesRead;
 
-                if (size > 0) {
-                    int pct = (int) Math.floor((100.0 * loadedBytes) / size);
-
-                    if(!progressStarted) {
-                        System.out.println();
-                        progressStarted = true;
-                    }
-
-                    if(pct != lastPct) {
-                        System.out.print("\r\033[K[-]: Progress: " + pct + "%");
-                        System.out.flush();
-                        lastPct = pct;
-                    }
-                }
                 // Optional: progress logging
-                //double progress = (100.0 * loadedBytes) / size;
-                //LoggerManager.getInstance().info(String.format("Progress: %.2f%%", progress));
-
-
+                double progress = (100.0 * loadedBytes) / size;
+                LoggerManager.getInstance().info(String.format("Progress: %.2f%%", progress));
             }
         }
 
-        System.out.println();
+
         LoggerManager.getInstance().info(String.format("File ['%s'] received.\n", fileName));
     }
 
