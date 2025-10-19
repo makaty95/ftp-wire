@@ -126,7 +126,11 @@ public class CommandSelectorDispatcher extends Thread {
                         commandType = CommandType.typeOf(commandPacket.getCommand());
                     } catch (NoCommandWithSpecifiedHeaderException e) {
                         //guard against null values
-                        String commandId= commandPacket.getCommand().getCommandId()!=null?commandPacket.getCommand().getCommandId() :"Unknown cmd";
+                        String commandId = commandPacket.getCommand().getCommandId();
+                        if(commandId == null) {
+                             commandId = "Unknown cmd";
+                             Server.serverLogger.error("Some command have a null id");
+                        }
                         TaskDispatcher.getInstance().submitAsyncTask(() ->
                                 new CommandErrorHandler().handle(ErrorType.INVALID_COMMAND, session, commandId)
                         );
