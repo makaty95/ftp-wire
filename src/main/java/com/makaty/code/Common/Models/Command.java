@@ -2,14 +2,32 @@ package com.makaty.code.Common.Models;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.CountDownLatch;
 
 public class Command {
     private String header;
     private ArrayList<String> params;
 
+    private String commandId;
+    private CountDownLatch latch;
+
+    public String getCommandId() {
+        return commandId;
+    }
+    public CountDownLatch getLatch() {
+        return latch;
+    }
+    public void setCommandId(String commandId) {  this.commandId = commandId; }
+
+    public void setLatch(CountDownLatch latch) {
+        this.latch = latch;
+    }
+
     public Command(String header) {
         params = new ArrayList<>();
         this.header = header;
+        commandId = UUID.randomUUID().toString();
     }
 
     public Command(String command, ArrayList<String> params) {
@@ -22,7 +40,8 @@ public class Command {
     }
 
     public String getParam(int idx) {
-        if(idx < 0 || idx >= params.size()) return null;
+        if(idx < 0 || idx >= params.size()){
+            return null;}
 
         return this.params.get(idx);
     }

@@ -80,13 +80,17 @@ public enum PacketType {
     COMMAND(4,
             channel -> {
                 String sessionId = PacketSerializer.readString(channel);
+                String commandId = PacketSerializer.readString(channel);//Supposing the commandId is written by the other side to the channel earlier
                 String header = PacketSerializer.readString(channel);
                 ArrayList<String> params = PacketSerializer.readStrings(channel);
-                return new CommandPacket(new Command(header, params), sessionId);
+                Command command = new Command(header,params);
+                command.setCommandId(commandId);
+                return new CommandPacket(command, sessionId);
             },
             (packet, channel) -> {
                 CommandPacket cmdPacket = (CommandPacket) packet;
                 PacketSerializer.writeString(channel, cmdPacket.getSessionId());
+                PacketSerializer.writeString(channel,cmdPacket.getCommand().getCommandId());
                 PacketSerializer.writeString(channel, cmdPacket.getCommand().getHeader());
                 PacketSerializer.writeStrings(channel, cmdPacket.getCommand().getParams());
                 return null;
@@ -95,18 +99,20 @@ public enum PacketType {
 
     // ----------------- Server to Client packets ----------------- //
 
-    REPLY(4,
+    REPLY(5,//updated
             channel -> { // the reading //
+                String commandId = PacketSerializer.readString(channel);
                 int replyType = PacketSerializer.readInt(channel);
                 List<Long> longs = PacketSerializer.readLongs(channel);
                 List<String> strings = PacketSerializer.readStrings(channel);
-                return new ReplyPacket(new Reply(ReplyType.values()[replyType], longs, strings));
+                return new ReplyPacket(new Reply(ReplyType.values()[replyType], longs, strings,commandId));
             },
             (packet, channel) -> { // the writing //
 
                 // casting packet
                 ReplyPacket replyPacket = (ReplyPacket) packet;
 
+                PacketSerializer.writeString(channel,replyPacket.getReply().getCommandId());
                 // writing reply type
                 PacketSerializer.writeInt(channel, replyPacket.getReply().getReplyType().ordinal());
 

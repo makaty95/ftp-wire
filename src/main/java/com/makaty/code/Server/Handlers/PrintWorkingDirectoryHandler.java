@@ -19,13 +19,13 @@ public class PrintWorkingDirectoryHandler implements CommandHandler {
         // 1) validate it is in a valid shape
         if(!CommandType.PWD.isValidSignature(command)) {
             TaskDispatcher.getInstance().submitAsyncTask(() ->
-                    new CommandErrorHandler().handle(ErrorType.INVALID_COMMAND_PARAMS, clientSession)
+                    new CommandErrorHandler().handle(ErrorType.INVALID_COMMAND_PARAMS, clientSession,command.getCommandId())
             );
             return null;
         }
 
         // creating response packet which have the full path of the current working directory
-        ReplyPacket replyPacket = ReplyType.PWD_INFO.createPacket(
+        ReplyPacket replyPacket = ReplyType.PWD_INFO.createPacket(command.getCommandId(),
                 clientSession.getClientProfile().getRelativeWorkingDir(),
                 clientSession.getClientProfile().getAbsoluteWorkingDir()
         );

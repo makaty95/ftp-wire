@@ -23,7 +23,7 @@ public class ListFilesCommandHandler implements CommandHandler {
         // 1) validate it is in a valid shape
         if(!CommandType.NLIST.isValidSignature(command)) {
             TaskDispatcher.getInstance().submitAsyncTask(() ->
-                    new CommandErrorHandler().handle(ErrorType.INVALID_COMMAND_PARAMS, clientSession)
+                    new CommandErrorHandler().handle(ErrorType.INVALID_COMMAND_PARAMS, clientSession,command.getCommandId())
             );
             return null;
         }
@@ -37,7 +37,7 @@ public class ListFilesCommandHandler implements CommandHandler {
         Status state = UtilityFunctions.checkFileAuthorization(newFile, clientSession.getClientProfile());
         if(state == Status.UNAUTHORIZED_ACCESS) {
             TaskDispatcher.getInstance().submitAsyncTask(() ->
-                    new CommandErrorHandler().handle(ErrorType.UNAUTHORIZED, clientSession)
+                    new CommandErrorHandler().handle(ErrorType.UNAUTHORIZED, clientSession,command.getCommandId())
             );
             return null;
         }
@@ -52,7 +52,7 @@ public class ListFilesCommandHandler implements CommandHandler {
         }
 
         // 3) send result to the client
-        ReplyPacket replyPacket = ReplyType.MESSAGE.createPacket(sb.toString());
+        ReplyPacket replyPacket = ReplyType.MESSAGE.createPacket(command.getCommandId(),sb.toString());
 
         // submitting task to the dispatcher
         TaskDispatcher.getInstance().submitAsyncTask(new SendPacketTask(clientSession.getClientProfile(), replyPacket));

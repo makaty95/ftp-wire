@@ -12,8 +12,6 @@ public class ReplyPacket implements Packet {
         this.reply = reply;
     }
 
-
-
     @Override
     public PacketType getType() {
         return PacketType.REPLY;
@@ -22,6 +20,5 @@ public class ReplyPacket implements Packet {
     public Reply getReply() {
         return reply;
     }
-
 
 }
