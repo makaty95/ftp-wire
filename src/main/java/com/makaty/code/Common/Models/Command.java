@@ -33,7 +33,6 @@ public class Command {
     public Command(String command, ArrayList<String> params) {
         this(command);
         this.params = params;
-        commandId = UUID.randomUUID().toString();
     }
 
     public void addParam(String param) {
