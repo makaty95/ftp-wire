@@ -41,7 +41,6 @@ public class Command {
 
     public String getParam(int idx) {
         if(idx < 0 || idx >= params.size()){
-            System.out.println("[DEBUG] Invalid param access: idx=" + idx + ", size=" + params.size());
             return null;}
 
         return this.params.get(idx);
