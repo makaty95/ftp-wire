@@ -121,12 +121,12 @@ public class DataController {
 
                 // Optional: progress logging
                 double progress = (100.0 * loadedBytes) / size;
-                LoggerManager.getInstance().info(String.format("Progress: %.2f%%", progress));
+                LoggerManager.getInstance().info("@progress " + String.format("Progress: %.2f%%", progress));
             }
         }
 
-
-        LoggerManager.getInstance().info(String.format("File ['%s'] received.\n", fileName));
+        LoggerManager.getInstance().info("@progress:end");
+        LoggerManager.getInstance().info(String.format("File ['%s'] received.", fileName));
     }
 
     private boolean validateAllDirectories(String uri) {

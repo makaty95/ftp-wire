@@ -27,6 +27,17 @@ public class ClientCLILogger implements ClientLogger {
 
     @Override
     synchronized public void info(String message) {
+        if (message.startsWith("@progress ")) {
+            String cleanMessage = message.substring(10);
+            System.out.print("\r\u001B[2K[-]: " + cleanMessage);
+            System.out.flush();
+            return;
+        }
+        if ("@progress:end".equals(message)) {
+            System.out.println();
+            System.out.flush();
+            return;
+        }
         reader.printAbove("[-]: " + message);
     }
 
