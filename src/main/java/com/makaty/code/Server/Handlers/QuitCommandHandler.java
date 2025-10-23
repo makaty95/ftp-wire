@@ -2,11 +2,14 @@ package com.makaty.code.Server.Handlers;
 
 
 import com.makaty.code.Common.Models.Command;
+import com.makaty.code.Common.Packets.Communication.ReplyPacket;
+import com.makaty.code.Common.Types.ReplyType;
 import com.makaty.code.Server.Handshaking.Session;
 import com.makaty.code.Server.Server;
 import com.makaty.code.Server.Models.*;
 import com.makaty.code.Server.Models.Types.CommandType;
 import com.makaty.code.Server.Models.Types.ErrorType;
+import com.makaty.code.Server.Tasks.SendPacketTask;
 
 public class QuitCommandHandler implements CommandHandler {
 
@@ -28,6 +31,11 @@ public class QuitCommandHandler implements CommandHandler {
         }
 
         if(clientSession != null) {
+            // send quit affirm packet: this packet will contain only the session ID of the client.
+            ReplyPacket replyPacket = ReplyType.QUIT_AFFIRM.createPacket(command.getCommandId(), clientSession.getSessionId());
+
+            // submitting task to the dispatcher
+            TaskDispatcher.getInstance().submitSyncTask(new SendPacketTask(clientSession.getClientProfile(), replyPacket));
             Server.serverLogger.info(String.format("[Client \"%s\" Disconnected]", clientSession.getClientName()));
             Server.sessionRegistry.terminateSession(clientSession.getSessionId());
         }

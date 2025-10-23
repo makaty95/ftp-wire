@@ -1,6 +1,7 @@
 package com.makaty.code.clientCLI;
 
 import com.makaty.code.Client.Client;
+import com.makaty.code.Client.Models.LoggerManager;
 import com.makaty.code.Common.Models.Command;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
@@ -26,7 +27,7 @@ public class ClientCLI {
         client = new Client();
         client.addLogger(new ClientCLILogger(reader));
 
-        System.out.println("Terminal type: " + terminal.getType());
+        LoggerManager.getInstance().info("Terminal type: " + terminal.getType());
     }
 
 

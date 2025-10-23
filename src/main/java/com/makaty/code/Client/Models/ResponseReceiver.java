@@ -23,6 +23,7 @@ public class ResponseReceiver extends Thread {
 
                     replyPacket.getReply().getReplyType().getReplyHandler().handle(replyPacket.getReply());
                     String commandId = replyPacket.getReply().getCommandId();
+
                     if(commandId !=null){
                         Command command= CommandController.getInstance().getPendingCommands().get(commandId);
                         if(command!=null){

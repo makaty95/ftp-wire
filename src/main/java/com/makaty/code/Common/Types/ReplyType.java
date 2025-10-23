@@ -38,6 +38,11 @@ public enum ReplyType {
         String relativePath =args.length>2?  (String) args[1]:(String) args[0];
         String absolutePath = args.length>2? (String) args[2]:(String) args[1];
         return new ReplyPacket(new Reply(self, List.of(), List.of(relativePath, absolutePath),commandId));
+    }),
+    QUIT_AFFIRM(QUIT_AFFIRM_ReplyHandler::new, (ReplyType self, Object... args) -> {
+        String commandId =args.length>1? (String) args[0]:null;
+        String sessionId =args.length>1? (String) args[1]:(String) args[0];
+        return new ReplyPacket(new Reply(self, List.of(), List.of(sessionId), commandId));
     });
 
     private final Supplier<ReplyHandler> handlerSupplier;
