@@ -7,6 +7,12 @@ import com.makaty.code.Common.Exceptions.NoCommandWithSpecifiedHeaderException;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
 import org.jline.terminal.Terminal;
+import org.jline.utils.AttributedString;
+import org.jline.utils.AttributedStringBuilder;
+import org.jline.utils.AttributedStyle;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 public class OfflineClientCLI {
 
@@ -20,17 +26,40 @@ public class OfflineClientCLI {
         this.terminal = terminal;
         this.client = client;
         this.reader = LineReaderBuilder.builder().terminal(terminal).build();
+
     }
+
 
     private Command writeCommand() {
         String in;
-        String userName = client.getUserName();
         do {
 
-            terminal.writer().printf("\r(%s)> ", userName);
-            terminal.writer().flush();
+            // build dynamic info
+            String user = System.getProperty("user.name");
+            String dir = System.getProperty("user.dir");
+            String host = null;
 
-            in = reader.readLine();
+            try {
+                host = InetAddress.getLocalHost().getHostName();
+            } catch (UnknownHostException e) {
+                //TODO: add logs here.
+                throw new RuntimeException(e);
+            }
+
+            // build colorized prompt
+            AttributedStringBuilder promptBuilder = new AttributedStringBuilder()
+                    .style(AttributedStyle.DEFAULT.foreground(AttributedStyle.GREEN))
+                    .append(user + "@" + host)
+                    .style(AttributedStyle.DEFAULT.foreground(AttributedStyle.MAGENTA))
+                    .append(":")
+                    .style(AttributedStyle.DEFAULT.foreground(AttributedStyle.YELLOW))
+                    .append(dir)
+                    .style(AttributedStyle.DEFAULT.foreground(AttributedStyle.RED))
+                    .append("\n-{> ");
+
+            in = reader.readLine(promptBuilder.toAnsi());
+
+
 
         }while(in.isBlank());
 

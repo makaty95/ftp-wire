@@ -7,6 +7,8 @@ import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
+import org.jline.utils.AttributedStringBuilder;
+import org.jline.utils.AttributedStyle;
 
 import java.io.IOException;
 
@@ -28,7 +30,10 @@ public class ClientCLI {
         client.addLogger(new ClientCLILogger(reader));
 
         LoggerManager.getInstance().info("Terminal type: " + terminal.getType());
+
     }
+
+
 
 
     private void sendCommand(Command command) throws IOException {
@@ -42,7 +47,19 @@ public class ClientCLI {
         do {
             String userName = client.getUserName();
             String prompt = String.format("(%s@%s)> ", userName, client.getWorkingDir());
-            in = reader.readLine(prompt); // JLine handles the prompt
+
+            // build colorized prompt
+            AttributedStringBuilder promptBuilder = new AttributedStringBuilder()
+                    .style(AttributedStyle.DEFAULT.foreground(AttributedStyle.BRIGHT))
+                    .append(client.getUserName())
+                    .style(AttributedStyle.DEFAULT.foreground(AttributedStyle.MAGENTA))
+                    .append("@")
+                    .style(AttributedStyle.DEFAULT.foreground(AttributedStyle.YELLOW))
+                    .append(client.getWorkingDir())
+                    .style(AttributedStyle.DEFAULT.foreground(AttributedStyle.RED))
+                    .append("\n-{> ");
+
+            in = reader.readLine(promptBuilder.toAnsi()); // JLine handles the prompt
         } while (in.isBlank() && client.isConnected());
 
         String[] splits = in.split(" ");
