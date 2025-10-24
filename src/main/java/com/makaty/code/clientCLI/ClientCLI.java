@@ -27,7 +27,7 @@ public class ClientCLI {
         reader = LineReaderBuilder.builder().terminal(terminal).build();
 
         client = new Client();
-        client.addLogger(new ClientCLILogger(reader));
+        client.addLogger(new ClientCLILogger(reader, terminal));
 
         LoggerManager.getInstance().info("Terminal type: " + terminal.getType());
 
@@ -50,7 +50,7 @@ public class ClientCLI {
 
             // build colorized prompt
             AttributedStringBuilder promptBuilder = new AttributedStringBuilder()
-                    .style(AttributedStyle.DEFAULT.foreground(AttributedStyle.BRIGHT))
+                    .style(AttributedStyle.DEFAULT.foreground(AttributedStyle.CYAN))
                     .append(client.getUserName())
                     .style(AttributedStyle.DEFAULT.foreground(AttributedStyle.MAGENTA))
                     .append("@")

@@ -5,4 +5,5 @@ import com.makaty.code.Common.Loggers.Logger;
 
 public interface ClientLogger extends Logger {
     void RemoteLog(String message);
+    void fileProgress(double progress);
 }
