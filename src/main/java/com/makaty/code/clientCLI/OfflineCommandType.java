@@ -6,6 +6,7 @@ import com.makaty.code.Common.Models.UtilityFunctions;
 import com.makaty.code.Common.Exceptions.NoCommandWithSpecifiedHeaderException;
 import org.jline.utils.InfoCmp;
 
+import java.io.IOException;
 import java.util.List;
 
 public enum OfflineCommandType {
@@ -37,6 +38,26 @@ public enum OfflineCommandType {
         "set the hostname and port of the remote.",
         new String[]{"remote_hostname", "remote_port"},
         new String[]{}
+    ),
+    BYE(
+            (command, client, terminal) -> {
+
+                try {
+                    if (client.isConnected()) {
+                        client.terminateConnection();
+                    }
+                    terminal.writer().println("See you next time.");
+                    terminal.writer().flush();
+                    Thread.sleep(1000);
+                    System.exit(0);
+                } catch (Exception e) {
+                    System.exit(0);
+                }
+            },
+            "bye",
+            "close connection.",
+            new String[]{},
+            new String[]{}
     ),
 
     SET_LOCAL(
