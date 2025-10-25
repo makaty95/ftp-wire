@@ -25,6 +25,12 @@ public class LoggerManager {
         }
     }
 
+    private void notifyProgress(double progress) {
+        for(ClientLogger logger : loggers) {
+            logger.fileProgress(progress);
+        }
+    }
+
     private void notifyError(String message) {
         for(ClientLogger logger : loggers) {
             logger.error(message);
@@ -62,6 +68,10 @@ public class LoggerManager {
 
     public void RemoteInfo(String message) {
         notifyRemote(message);
+    }
+
+    public void fileProgress(double progress) {
+        notifyProgress(progress);
     }
 
 

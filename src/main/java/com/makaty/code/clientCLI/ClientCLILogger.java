@@ -11,8 +11,9 @@ public class ClientCLILogger implements ClientLogger {
     private static final String RESET  = "\u001B[0m";
     private static final String RED    = "\u001B[31m";
     private static final String YELLOW = "\u001B[33m";
-    private static final String BLUE   = "\u001B[34m";
+    private static final String BLUE   = "\u001B[94m";
     private static final String GREEN = "\u001B[32m";
+    private static final String GRAY = "\u001B[90m";
 
 
 
@@ -20,29 +21,53 @@ public class ClientCLILogger implements ClientLogger {
 
 
     private final LineReader reader;
+    private final Terminal terminal;
 
-    public ClientCLILogger(LineReader reader) {
+    public ClientCLILogger(LineReader reader, Terminal terminal) {
+        this.terminal = terminal;
         this.reader = reader;
     }
 
     @Override
     synchronized public void info(String message) {
-        reader.printAbove("[-]: " + message);
+
+        terminal.writer().print("\r" + GRAY + "[-]: " + message + RESET + "\n");
+        terminal.flush();
+
+        //reader.printAbove("[-]: " + message);
     }
 
     @Override
+    synchronized public void fileProgress(double progress) {
+
+        terminal.writer().print("\r" + BLUE + "[-]: " + String.format("Progress: %.2f%%", progress) + RESET);
+        terminal.flush();
+
+        //reader.printAbove("[-]: " + message);
+    }
+
+
+
+    @Override
     synchronized public void warn(String message) {
-        reader.printAbove( YELLOW + "[WARNING]: " + message + RESET);
+//        reader.printAbove( YELLOW + "[WARNING]: " + message + RESET);
+        terminal.writer().print("\r" + YELLOW + "[WARNING]: " + message + RESET + "\n");
+        terminal.flush();
     }
 
     @Override
     synchronized public void error(String message) {
-        reader.printAbove( RED + "[ERROR]: " + message + RESET);
+//        reader.printAbove( RED + "[ERROR]: " + message + RESET);
+        terminal.writer().print("\r" + RED + "[ERROR]: " + message + RESET + "\n");
+        terminal.flush();
     }
 
     @Override
     synchronized public void RemoteLog(String message) {
-        reader.printAbove( GREEN + message + RESET);
+        terminal.writer().print("\r" + GREEN + message + RESET + "\n");
+        terminal.flush();
+
+//        reader.printAbove(  GREEN + message + RESET);
     }
 
 }

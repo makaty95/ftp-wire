@@ -121,7 +121,8 @@ public class DataController {
 
                 // Optional: progress logging
                 double progress = (100.0 * loadedBytes) / size;
-                LoggerManager.getInstance().info(String.format("Progress: %.2f%%", progress));
+                LoggerManager.getInstance().fileProgress(progress);
+                //LoggerManager.getInstance().info(String.format("Progress: %.2f%%", progress));
             }
         }
 
