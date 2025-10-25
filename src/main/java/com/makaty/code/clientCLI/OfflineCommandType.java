@@ -48,8 +48,9 @@ public enum OfflineCommandType {
                     }
                     terminal.writer().println("See you next time.");
                     terminal.writer().flush();
+                    Thread.sleep(1000);
                     System.exit(0);
-                } catch (IOException e) {
+                } catch (Exception e) {
                     System.exit(0);
                 }
             },
