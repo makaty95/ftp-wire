@@ -40,14 +40,7 @@ public class Server {
 
         Server.serverLogger.info("Server started successfully.");
 
-        Server.serverLogger.info(String.format(
-                "Server info -> CommandHost: %s | CommandPort: %d | DataHost: %s | DataPort: %d | WorkerThreads: %d",
-                ServerConfig.COMMAND_HOST,
-                ServerConfig.COMMAND_PORT,
-                ServerConfig.DATA_HOST,
-                ServerConfig.DATA_PORT,
-                ServerConfig.WORKER_THREADS
-        ));
+        showServerInfo();
     }
 
     public void terminate() {
@@ -66,6 +59,17 @@ public class Server {
         Server.sessionRegistry.removeAll();
 
         serverLogger.info("Server terminated.");
+    }
+
+    private void showServerInfo() {
+        Server.serverLogger.info(String.format(
+                "Server info -> CommandHost: %s | CommandPort: %d | DataHost: %s | DataPort: %d | WorkerThreads: %d",
+                ServerConfig.COMMAND_HOST,
+                ServerConfig.COMMAND_PORT,
+                ServerConfig.DATA_HOST,
+                ServerConfig.DATA_PORT,
+                ServerConfig.WORKER_THREADS)
+        );
     }
 
 
