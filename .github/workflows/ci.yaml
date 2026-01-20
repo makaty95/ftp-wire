@@ -23,13 +23,13 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '17'   # or 11, match your project
+          java-version: '17'
 
       # -------------------------
       # 2. Run unit tests
       # -------------------------
       - name: Run unit tests
-        run: mvn clean test
+        run: mvn test
 
       # -------------------------
       # 3. Docs deployment
