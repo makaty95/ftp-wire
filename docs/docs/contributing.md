@@ -3,6 +3,7 @@ We welcome contributors to **ftp-wire** project, if you would like to fix some e
 Ways you can contribute to this project:
 - Update docs files, more clear instructions or diagrams
 - Bug fixes
+- Add Unit/Integration tests
 - New features implementation (you should open a new issue discussing it and asking for a feedback before starting)
 
 > If you are new to Github open source contribution, check [Contributing to a project](https://docs.github.com/en/get-started/exploring-projects-on-github/contributing-to-a-project).

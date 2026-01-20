@@ -10,5 +10,4 @@ public class ClientConfig {
     public static String USER_NAME = "TestUser" + new Random().nextInt(100);
 
 
-
 }

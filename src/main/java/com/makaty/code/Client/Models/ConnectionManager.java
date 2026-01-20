@@ -12,6 +12,7 @@ import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
 import java.rmi.ConnectIOException;
 
+//TODO: Implement Unit tests
 public class ConnectionManager {
     private SocketChannel commandSocketChannel, dataSocketChannel;
     private InetSocketAddress remoteCommandAddress, remoteDataAddress;
@@ -30,6 +31,7 @@ public class ConnectionManager {
         }
         return instance;
     }
+
 
     public void initConnection() throws IOException {
         handshake();
@@ -100,7 +102,6 @@ public class ConnectionManager {
         try {
             commandSocketChannel.close();
             dataSocketChannel.close();
-            sessionId = null;
             instance = null;
 
             // stop the command controller

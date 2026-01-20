@@ -8,6 +8,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class DataController {
 
@@ -24,20 +27,6 @@ public class DataController {
         return instance;
     }
 
-    private String constructURI(String fileName, String fileLocation) {
-
-        if(fileLocation.endsWith("/") && !fileName.startsWith("/")) return fileLocation.concat(fileName);
-
-        if(!fileLocation.endsWith("/") && fileName.startsWith("/")) return fileLocation.concat(fileName);
-
-        if(fileLocation.endsWith("/") && fileName.startsWith("/")) {
-            return fileLocation.concat(fileName.substring(1, fileName.length()-1));
-        }
-
-        return fileLocation.concat("/").concat(fileName);
-
-
-    }
 
     private String resolveProperUnit(Long size) {
         if(size < (1024)) return "B";
@@ -56,45 +45,14 @@ public class DataController {
 
     }
 
-    private void skipFileBytes(long size) throws IOException {
-        SocketChannel dataSocket = ConnectionManager.getInstance().getDataSocketChannel();
-        ByteBuffer buffer = ByteBuffer.allocate(CHUNK);
-        long skippedBytes = 0L;
-
-        while (skippedBytes < size) {
-            buffer.clear();
-            int bytesRead = dataSocket.read(buffer);
-
-            if (bytesRead == -1) {
-                LoggerManager.getInstance().warn("Connection closed before file discard completed.\n");
-                break;
-            } else if (bytesRead == 0) {
-                continue;
-            }
-
-            skippedBytes += bytesRead; // just count, don't write anywhere
-        }
-
-        LoggerManager.getInstance().info("File skipped.\n");
-
-    }
-
-
     public void receiveFile(String fileName, String location, long size) throws IOException {
 
+        Path filePath = Paths.get(location, fileName);
+        Files.createDirectories(filePath.getParent());
 
-        String URI = constructURI(fileName, location);
         String unit = resolveProperUnit(size);
         double roundedSize = resolveProperSize(size, unit);
 
-
-        // Validate if all path folders exist
-        // if not it will automatically be created.
-        if(!validateAllDirectories(URI)) {
-            LoggerManager.getInstance().warn("Can not receive file, file path is invalid.\n");
-            skipFileBytes(size);
-            return;
-        }
 
         LoggerManager.getInstance().info(String.format("Receiving ['%s' | size = %.2f%s]...\n", fileName, roundedSize, unit));
         SocketChannel dataSocket = ConnectionManager.getInstance().getDataSocketChannel();
@@ -102,7 +60,8 @@ public class DataController {
 
 
 
-        try(FileOutputStream fos = new FileOutputStream(URI)) {
+
+        try(FileOutputStream fos = new FileOutputStream(filePath.toFile())) {
             ByteBuffer buffer = ByteBuffer.allocate(CHUNK);
 
             while (loadedBytes < size) {
@@ -124,21 +83,12 @@ public class DataController {
                 LoggerManager.getInstance().fileProgress(progress);
                 //LoggerManager.getInstance().info(String.format("Progress: %.2f%%", progress));
             }
+
         }
 
 
         LoggerManager.getInstance().info(String.format("File ['%s'] received.\n", fileName));
     }
-
-    private boolean validateAllDirectories(String uri) {
-        File file = new File(uri);
-        File parentDir = file.getParentFile();
-        if (parentDir != null && !parentDir.exists()) {
-            return parentDir.mkdirs(); // create all parent directories if needed
-        }
-        return true;
-    }
-
 
     public void sendFile(String filePath) {
         //TODO: implement this

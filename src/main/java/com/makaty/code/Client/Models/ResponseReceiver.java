@@ -5,8 +5,9 @@ import com.makaty.code.Common.Models.Command;
 import com.makaty.code.Common.Packets.Communication.ReplyPacket;
 import com.makaty.code.Common.Types.PacketType;
 import com.makaty.code.Common.Exceptions.RemoteDisconnectionException;
-
 import java.rmi.ConnectIOException;
+
+//TODO: Implement Unit tests
 public class ResponseReceiver extends Thread {
 
     private volatile boolean running = false;
@@ -24,11 +25,11 @@ public class ResponseReceiver extends Thread {
                     replyPacket.getReply().getReplyType().getReplyHandler().handle(replyPacket.getReply());
                     String commandId = replyPacket.getReply().getCommandId();
 
-                    if(commandId !=null){
+                    if(commandId != null) {
                         Command command= CommandController.getInstance().getPendingCommands().get(commandId);
-                        if(command!=null){
+                        if(command != null) {
                             CommandController.getInstance().signalResponseReceived(command);
-                        }else{
+                        } else {
                             LoggerManager.getInstance().warn("Command with the following Id not found : "+commandId);
                         }
                     }

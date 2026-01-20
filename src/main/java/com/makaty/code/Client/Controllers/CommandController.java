@@ -14,9 +14,16 @@ public class CommandController {
     private final CommandSender commandSender;
     private ResponseReceiver responseReceiver;
     private static CommandController instance;
+
     private CommandController() {
-        commandSender = new CommandSender();
+        this(new CommandSender());
     }
+
+    // Another constructor for testability
+    public CommandController(CommandSender commandSender) {
+        this.commandSender = commandSender;
+    }
+
     private final ConcurrentHashMap<String,Command> pendingCommands = new ConcurrentHashMap<>();
 
     public ConcurrentHashMap<String,Command> getPendingCommands() {
@@ -57,7 +64,7 @@ public class CommandController {
 
     //release the latch when response received
     public void signalResponseReceived(Command command){
-        if(command.getLatch()!=null){
+        if(command.getLatch()!=null) {
             command.getLatch().countDown();
         }
 
