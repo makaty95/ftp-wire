@@ -1,11 +1,11 @@
 ## Prerequisites
 - **Java 17+**
 - **Maven 3.8+**
-- **An IDE of your choose (Eclipse, VSCode, Intellij, etc..)**
+- **An IDE of your choice (Eclipse, VSCode, Intellij, etc.)**
 ---
 
 ## Installation
-You can use any command line too such as gitbash, cmder. powershell or even integrated terminals like IntelliJ terminal
+You can use any command line too, such as gitbash, cmder. powershell or even integrated terminals like IntelliJ terminal
 for the installation step.
 ```bash
 git clone https://github.com/makaty95/ftp-wire.git

@@ -1,30 +1,58 @@
 name: ci
+
 on:
   push:
     branches:
       - master
       - main
+
 permissions:
   contents: write
+
 jobs:
-  deploy:
+  build-test-deploy:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
+
+      # -------------------------
+      # 1. Set up Java (for unit/integration tests)
+      # -------------------------
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'   # or 11, match your project
+
+      # -------------------------
+      # 2. Run unit tests
+      # -------------------------
+      - name: Run unit tests
+        run: mvn clean test
+
+      # -------------------------
+      # 3. Docs deployment
+      # -------------------------
       - name: Configure Git Credentials
         run: |
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+
       - uses: actions/setup-python@v5
         with:
           python-version: 3.x
+
       - run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV
+
       - uses: actions/cache@v4
         with:
           key: mkdocs-material-${{ env.cache_id }}
           path: .cache
           restore-keys: |
             mkdocs-material-
+
       - run: pip install mkdocs-material
+
       - run: mkdocs gh-deploy --force
         working-directory: docs/
