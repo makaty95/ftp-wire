@@ -51,15 +51,13 @@ public class OfflineClientCLI {
                     .style(AttributedStyle.DEFAULT.foreground(AttributedStyle.GREEN))
                     .append(user + "@" + host)
                     .style(AttributedStyle.DEFAULT.foreground(AttributedStyle.MAGENTA))
-                    .append(":")
+                    .append("::")
                     .style(AttributedStyle.DEFAULT.foreground(AttributedStyle.YELLOW))
                     .append(dir)
                     .style(AttributedStyle.DEFAULT.foreground(AttributedStyle.RED))
                     .append("\n-{> ");
 
             in = reader.readLine(promptBuilder.toAnsi());
-
-
 
         }while(in.isBlank());
 

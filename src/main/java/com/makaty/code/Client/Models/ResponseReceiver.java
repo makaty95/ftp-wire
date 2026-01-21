@@ -34,6 +34,7 @@ public class ResponseReceiver extends Thread {
                         }
                     }
                 } catch (RemoteDisconnectionException e) {
+                    LoggerManager.getInstance().info("Remote disconnected");
                     terminate(); // close the connection
                 }
             }
@@ -57,5 +58,6 @@ public class ResponseReceiver extends Thread {
         } catch (ConnectIOException e) {
             LoggerManager.getInstance().warn("Error closing connection: " + e.getMessage());
         }
+
     }
 }

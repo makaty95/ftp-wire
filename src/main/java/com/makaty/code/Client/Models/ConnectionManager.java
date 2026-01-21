@@ -103,11 +103,12 @@ public class ConnectionManager {
             commandSocketChannel.close();
             dataSocketChannel.close();
             instance = null;
+            sessionId = null;
 
             // stop the command controller
             CommandController.getInstance().terminate();
 
-            LoggerManager.getInstance().info("Connection terminated.\n");
+            LoggerManager.getInstance().info("Connection terminated.");
         } catch (IOException e) {
             throw new ConnectIOException("Something happened during connection termination\n");
         }

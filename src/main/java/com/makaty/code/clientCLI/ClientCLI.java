@@ -20,6 +20,19 @@ public class ClientCLI {
     private final LineReader reader;
     boolean running;
 
+    private static final String banner = """
+
+                           ___  __                                                   \s
+                         /'___\\/\\ \\__                               __               \s
+                        /\\ \\__/\\ \\ ,_\\  _____            __  __  __/\\_\\  _ __    __  \s
+                        \\ \\ ,__\\\\ \\ \\/ /\\ '__`\\  _______/\\ \\/\\ \\/\\ \\/\\ \\/\\`'__\\/'__`\\\s
+                         \\ \\ \\_/ \\ \\ \\_\\ \\ \\L\\ \\/\\______\\ \\ \\_/ \\_/ \\ \\ \\ \\ \\//\\  __/\s
+                          \\ \\_\\   \\ \\__\\\\ \\ ,__/\\/______/\\ \\___x___/'\\ \\_\\ \\_\\\\ \\____\\
+                           \\/_/    \\/__/ \\ \\ \\/           \\/__//__/   \\/_/\\/_/ \\/____/
+                                          \\ \\_\\                                      \s
+                                           \\/_/                                      \s
+                        
+                        """;
 
 
     public ClientCLI() throws IOException {
@@ -41,13 +54,17 @@ public class ClientCLI {
     }
 
 
+    private Command parseToCommand(String in) {
+        String[] splits = in.split(" ");
+        Command ret = new Command(splits[0]);
+        for(int i = 1; i<splits.length; i++) ret.addParam(splits[i]);
+        return ret;
+    }
+
     private Command writeCommand() {
         String in;
 
-        do {
-            String userName = client.getUserName();
-            String prompt = String.format("(%s@%s)> ", userName, client.getWorkingDir());
-
+        while(client.isConnected()) {
             // build colorized prompt
             AttributedStringBuilder promptBuilder = new AttributedStringBuilder()
                     .style(AttributedStyle.DEFAULT.foreground(AttributedStyle.CYAN))
@@ -60,32 +77,19 @@ public class ClientCLI {
                     .append("\n-{> ");
 
             in = reader.readLine(promptBuilder.toAnsi()); // JLine handles the prompt
-        } while (in.isBlank() && client.isConnected());
 
-        String[] splits = in.split(" ");
-        Command ret = new Command(splits[0]);
-        for(int i = 1; i<splits.length; i++) ret.addParam(splits[i]);
+            if(!in.isBlank()) {
+                return parseToCommand(in);
+            }
 
-        return ret;
+        }
+
+        return null;
     }
 
     public void fire() {
 
         running = true;
-        String banner = """
-
-                           ___  __                                                   \s
-                         /'___\\/\\ \\__                               __               \s
-                        /\\ \\__/\\ \\ ,_\\  _____            __  __  __/\\_\\  _ __    __  \s
-                        \\ \\ ,__\\\\ \\ \\/ /\\ '__`\\  _______/\\ \\/\\ \\/\\ \\/\\ \\/\\`'__\\/'__`\\\s
-                         \\ \\ \\_/ \\ \\ \\_\\ \\ \\L\\ \\/\\______\\ \\ \\_/ \\_/ \\ \\ \\ \\ \\//\\  __/\s
-                          \\ \\_\\   \\ \\__\\\\ \\ ,__/\\/______/\\ \\___x___/'\\ \\_\\ \\_\\\\ \\____\\
-                           \\/_/    \\/__/ \\ \\ \\/           \\/__//__/   \\/_/\\/_/ \\/____/
-                                          \\ \\_\\                                      \s
-                                           \\/_/                                      \s
-                        
-                        """;
-
         terminal.writer().write(banner);
         terminal.flush();
 
@@ -105,7 +109,7 @@ public class ClientCLI {
 
                     // send command to server
                     try {
-                        sendCommand(command);
+                        if(command != null) sendCommand(command);
                     } catch (IOException e) {
                         terminal.writer().println("Failed to send command to remote!");
                         terminal.writer().flush();

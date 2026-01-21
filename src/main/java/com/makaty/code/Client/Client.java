@@ -85,7 +85,11 @@ public class Client {
 
     // Server interaction
     public void sendCommand(Command command) {
-        CommandController.getInstance().sendCommand(command);
+        if(this.isConnected()) {
+            CommandController.getInstance().sendCommand(command);
+        } else {
+            LoggerManager.getInstance().warn("No connection for sending command\n");
+        }
     }
 
     public void sendFile(String filePath) {
