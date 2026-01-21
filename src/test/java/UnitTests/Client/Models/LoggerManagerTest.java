@@ -2,6 +2,8 @@ package UnitTests.Client.Models;
 
 import com.makaty.code.Client.Loggers.ClientLogger;
 import com.makaty.code.Client.Models.LoggerManager;
+import com.makaty.code.Common.Loggers.Logger;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +21,10 @@ import static org.mockito.Mockito.*;
 
 public class LoggerManagerTest {
 
-
+    @BeforeEach
+    public void init() {
+        LoggerManager.resetInstance();
+    }
 
     @Test
     @DisplayName("Try logging some messages to a buffer using a logger")

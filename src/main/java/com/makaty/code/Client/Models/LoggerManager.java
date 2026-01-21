@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class LoggerManager {
 
-    ArrayList<ClientLogger> loggers;
+    private final ArrayList<ClientLogger> loggers;
     private static LoggerManager instance;
 
     private LoggerManager() {
@@ -73,6 +73,8 @@ public class LoggerManager {
     public void fileProgress(double progress) {
         notifyProgress(progress);
     }
+
+    public static void resetInstance(){instance = null;}
 
 
 }
