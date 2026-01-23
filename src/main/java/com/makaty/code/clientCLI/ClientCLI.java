@@ -49,11 +49,6 @@ public class ClientCLI {
 
 
 
-    private void sendCommand(Command command) throws IOException {
-        client.sendCommand(command);
-    }
-
-
     private Command parseToCommand(String in) {
         String[] splits = in.split(" ");
         Command ret = new Command(splits[0]);
@@ -108,12 +103,8 @@ public class ClientCLI {
                     Command command = writeCommand();
 
                     // send command to server
-                    try {
-                        if(command != null) sendCommand(command);
-                    } catch (IOException e) {
-                        terminal.writer().println("Failed to send command to remote!");
-                        terminal.writer().flush();
-                    }
+                    if(command != null) client.sendCommand(command);
+
                 }
             } else {
 

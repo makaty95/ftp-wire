@@ -35,6 +35,7 @@ public class ThreadPool {
             return null;
         } catch (ExecutionException e) {
             Server.serverLogger.error("Thread pool execution error, cause: " + e.getCause());
+            e.printStackTrace();
             return null;
         } catch (Exception e) {
 

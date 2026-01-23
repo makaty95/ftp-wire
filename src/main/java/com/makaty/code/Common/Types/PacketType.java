@@ -80,19 +80,42 @@ public enum PacketType {
     COMMAND(4,
             channel -> {
                 String sessionId = PacketSerializer.readString(channel);
+
+                // command id
                 String commandId = PacketSerializer.readString(channel);//Supposing the commandId is written by the other side to the channel earlier
+
+                // header
                 String header = PacketSerializer.readString(channel);
+
+                // parameters
                 ArrayList<String> params = PacketSerializer.readStrings(channel);
-                Command command = new Command(header,params);
+
+                // meta data
+                ArrayList<String> metaData = PacketSerializer.readStrings(channel);
+
+                Command command = new Command(header, params);
                 command.setCommandId(commandId);
+                command.addMetaData(metaData);
                 return new CommandPacket(command, sessionId);
             },
             (packet, channel) -> {
                 CommandPacket cmdPacket = (CommandPacket) packet;
+
+                // session id
                 PacketSerializer.writeString(channel, cmdPacket.getSessionId());
+
+                // command id
                 PacketSerializer.writeString(channel,cmdPacket.getCommand().getCommandId());
+
+                // header
                 PacketSerializer.writeString(channel, cmdPacket.getCommand().getHeader());
+
+                // parameters
                 PacketSerializer.writeStrings(channel, cmdPacket.getCommand().getParams());
+
+                // meta data
+                PacketSerializer.writeStrings(channel, cmdPacket.getCommand().getAllMetaData());
+
                 return null;
             }
     ),

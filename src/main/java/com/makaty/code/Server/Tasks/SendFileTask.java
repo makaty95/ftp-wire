@@ -27,12 +27,15 @@ public class SendFileTask extends DataTask {
 
     @Override
     public Void call() {
+        //System.out.println("Send file called. offset = " + offset);
+
         try (FileChannel fileChannel = FileChannel.open(targetFile.toPath(), StandardOpenOption.READ)) {
             ByteBuffer buffer = ByteBuffer.allocate(CHUNK_SIZE);
 
             int bytesRead = fileChannel.read(buffer, offset);
             if (bytesRead == -1) {
                 // EOF reached
+                Server.serverLogger.info(String.format("File '%s' sent successfully.", targetFile.getName()));
                 return null;
             }
             buffer.flip();

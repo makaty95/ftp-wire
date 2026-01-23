@@ -4,13 +4,16 @@ import com.makaty.code.Client.Models.ConnectionManager;
 import com.makaty.code.Client.Models.LoggerManager;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 public class DataController {
 
@@ -53,8 +56,10 @@ public class DataController {
         String unit = resolveProperUnit(size);
         double roundedSize = resolveProperSize(size, unit);
 
+        LoggerManager.getInstance().info(
+                String.format("[RETRIEVAL_START] file=%s size=%.2f%s", fileName, roundedSize, unit)
+        );
 
-        LoggerManager.getInstance().info(String.format("Receiving ['%s' | size = %.2f%s]...\n", fileName, roundedSize, unit));
         SocketChannel dataSocket = ConnectionManager.getInstance().getDataSocketChannel();
         long loadedBytes = 0L;
 
@@ -81,17 +86,58 @@ public class DataController {
                 // Optional: progress logging
                 double progress = (100.0 * loadedBytes) / size;
                 LoggerManager.getInstance().fileProgress(progress);
-                //LoggerManager.getInstance().info(String.format("Progress: %.2f%%", progress));
             }
 
         }
 
-
-        LoggerManager.getInstance().info(String.format("File ['%s'] received.\n", fileName));
+        LoggerManager.getInstance().info(String.format("File '%s' received successfully.", fileName));
     }
 
     public void sendFile(String filePath) {
-        //TODO: implement this
+        File file = new File(filePath);
+        if(!file.exists()) {
+            LoggerManager.getInstance().error("Specified file doesn't exist!");
+            return;
+        }
+
+        String fileName = file.getName();
+        long size = file.length();
+        String unit = resolveProperUnit(size);
+        double roundedSize = resolveProperSize(size, unit);
+
+
+        LoggerManager.getInstance().info(
+                String.format("[UPLOAD_START] file=%s size=%.2f%s", fileName, roundedSize, unit)
+        );
+        SocketChannel dataSocket = ConnectionManager.getInstance().getDataSocketChannel();
+        long uploadedBytes = 0L;
+        long bytesRead;
+
+
+        try(FileChannel fileChannel = FileChannel.open(file.toPath(), StandardOpenOption.READ)) {
+            ByteBuffer buffer = ByteBuffer.allocate(CHUNK);
+
+            while((bytesRead = fileChannel.read(buffer)) != -1) {
+                if(bytesRead == 0) continue;
+
+                // write data on socket
+                buffer.flip();
+                while(buffer.hasRemaining()) {
+                    dataSocket.write(buffer);
+                }
+
+                uploadedBytes += bytesRead;
+
+                double progress = (100.0 * uploadedBytes) / size;
+                LoggerManager.getInstance().fileProgress(progress);
+                buffer.clear(); // clear the buffer for next iteration read.
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        LoggerManager.getInstance().info(String.format("File '%s' uploaded successfully.", fileName));
     }
 
 

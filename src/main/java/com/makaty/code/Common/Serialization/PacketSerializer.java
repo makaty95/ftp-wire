@@ -40,6 +40,10 @@ public class PacketSerializer {
     /* ---------------- STRING LIST ---------------- */
 
     public static void writeStrings(SocketChannel channel, List<String> list) throws RemoteDisconnectionException {
+        if(list == null) {
+            writeInt(channel, -1);
+            return;
+        }
         writeInt(channel, list.size());
         for (String s : list) {
             writeString(channel, s);
@@ -48,6 +52,11 @@ public class PacketSerializer {
 
     public static ArrayList<String> readStrings(SocketChannel channel) throws RemoteDisconnectionException {
         int size = readInt(channel);
+
+        if(size == -1) {
+            return null; // -> list is null
+        }
+
         ArrayList<String> list = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             list.add(readString(channel));

@@ -6,6 +6,7 @@ public enum ErrorType {
     INVALID_PATH("Invalid file path provided.", "The file path you requested does not exist."),
     WRONG_FILE_NAME("Specified directory doesn't exist.", "Specified directory doesn't exist."),
     FILE_NOT_DIR("Specified path is not a valid directory", "Specified path does not refer to a directory."),
+    FILE_SIZE_LIMIT("Requested upload File exceeds 1GB.", "File size exceeds maximum limit (1GB)."),
 
     UNAUTHORIZED("Unauthorized request.", "You are unauthorized to perform this action."),
     INTERNAL_ERROR("Internal server error.", "An unexpected error occurred on the server.");

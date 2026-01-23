@@ -10,6 +10,7 @@ import com.makaty.code.Common.Models.Command;
 import com.makaty.code.Server.Models.Types.CommandType;
 import com.makaty.code.Common.Types.PacketType;
 import com.makaty.code.Server.Models.Types.ErrorType;
+import com.makaty.code.Server.Registries.SessionRegistry;
 import com.makaty.code.Server.Server;
 
 import java.io.IOException;
@@ -105,13 +106,12 @@ public class CommandSelectorDispatcher extends Thread {
             // reading the command packet
             CommandPacket commandPacket = (CommandPacket) PacketType.COMMAND.getReader().read(commandSocketChannel);
 
-
-            Server.serverLogger.info("Command received.");
             TaskDispatcher.getInstance().submitSyncTask(() -> {
                 try {
 
                     // get the client session
-                    Session session = Server.sessionRegistry.get(commandPacket.getSessionId());
+                    String sessionId = commandPacket.getSessionId();
+                    Session session = Server.sessionRegistry.get(sessionId);
 
                     // if there is no session for that client (ignore it)
                     if(session == null) {
@@ -119,6 +119,12 @@ public class CommandSelectorDispatcher extends Thread {
                         return null;
                     }
                     CommandType commandType = null;
+
+                    log_info: {
+                        String command = commandPacket.getCommand().toString();
+                        String username = Server.sessionRegistry.get(sessionId).getClientName();
+                        Server.serverLogger.info(String.format("[%s] Command received: %s", username, command));
+                    }
 
 
                     try {

@@ -45,6 +45,12 @@ public enum CommandType {
             "list all files and folders inside a directory", // description
             new String[]{}, // mandatory
             new String[]{"directory_name"} // optional
+    ),
+    STOR(StoreFileCommandHandler::new,
+            "stor", // header
+            "uploads a file to the remote", // description
+            new String[]{"file_path"}, // mandatory
+            new String[]{"new_file_name"} // optional
     );
 
 

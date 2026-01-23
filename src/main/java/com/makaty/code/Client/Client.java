@@ -7,6 +7,8 @@ import com.makaty.code.Client.Models.ClientConfig;
 import com.makaty.code.Client.Models.ConnectionManager;
 import com.makaty.code.Client.Models.LoggerManager;
 import com.makaty.code.Common.Models.Command;
+import com.makaty.code.Common.Models.Status;
+import com.makaty.code.Server.Models.Types.CommandType;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -85,6 +87,9 @@ public class Client {
 
     // Server interaction
     public void sendCommand(Command command) {
+
+        if(command.prepare() == Status.FAILED) return;
+
         if(this.isConnected()) {
             CommandController.getInstance().sendCommand(command);
         } else {

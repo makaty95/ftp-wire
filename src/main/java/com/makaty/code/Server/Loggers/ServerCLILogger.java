@@ -11,9 +11,9 @@ public class ServerCLILogger implements ServerLogger {
 
     // ANSI color codes
     private static final String RESET  = "\u001B[0m";
-    private static final String RED    = "\u001B[31m";
-    private static final String YELLOW = "\u001B[33m";
-    private static final String BLUE   = "\u001B[34m";
+    private static final String ERR    = "\u001B[31m";
+    private static final String WARN = "\u001B[33m";
+    private static final String INFO = "\u001B[36m"; // Cyan
 
     public ServerCLILogger() {
 
@@ -27,19 +27,19 @@ public class ServerCLILogger implements ServerLogger {
 
     @Override
     public void warn(String message) {
-        serverTerminal.writer().printf(YELLOW + "[SERVER_LOGGER] [WARNING]: %s" + RESET + "%n", message);
+        serverTerminal.writer().printf(WARN + "[SERVER_LOGGER] [WARNING]: %s" + RESET + "%n", message);
         serverTerminal.flush();
     }
 
     @Override
     public void info(String message) {
-        serverTerminal.writer().printf(BLUE + "[SERVER_LOGGER] [INFO]: %s" + RESET + "%n", message);
+        serverTerminal.writer().printf(INFO + "[SERVER_LOGGER] [INFO]: %s" + RESET + "%n", message);
         serverTerminal.flush();
     }
 
     @Override
     public void error(String message) {
-        serverTerminal.writer().printf(RED + "[SERVER_LOGGER] [ERROR]: %s" + RESET + "%n", message);
+        serverTerminal.writer().printf(ERR + "[SERVER_LOGGER] [ERROR]: %s" + RESET + "%n", message);
         serverTerminal.flush();
     }
 
