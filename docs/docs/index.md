@@ -53,7 +53,7 @@ The project uses the <a href="https://en.wikipedia.org/wiki/MIT_License" target=
 | `PWD`   | `No parameters`         | Displays the current working directory.                                          | :material-checkbox-marked-circle-outline: |
 | `CWD`   | `directory_path`        | Changes the current working directory.                                           | :material-checkbox-marked-circle-outline: |
 | `NLIST` | `directory_path`        | List all files and folders inside a directory.                                   | :material-checkbox-marked-circle-outline: |
-| `STOR`  | `file_path` `file_name` | Uploads a file to the server. Optionally rename it by providing `file_name`.     |         :material-progress-clock:         |
+| `STOR`  | `file_path` `file_name` | Uploads a file to the server. Optionally rename it by providing `file_name`.     | :material-checkbox-marked-circle-outline: |
 
 !!! wire-note "Status indication"
 
