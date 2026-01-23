@@ -67,7 +67,7 @@ The project uses the <a href="https://en.wikipedia.org/wiki/MIT_License" target=
 | `PWD`   | `No parameters`         | Displays the current working directory.                                          |   ✅    |
 | `CWD`   | `directory_path`        | Changes the current working directory.                                           |   ✅    |
 | `NLIST` | `directory_path`        | List all files and folders inside a directory.                                   |   ✅    |
-| `STOR`  | `file_path` `file_name` | Uploads a file to the server. Optionally rename it by providing `file_name`.     |   ⬜    |
+| `STOR`  | `file_path` `file_name` | Uploads a file to the server. Optionally rename it by providing `file_name`.     |   ✅    |
 
 
 ## Project Core Modules
